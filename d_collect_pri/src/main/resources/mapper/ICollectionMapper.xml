@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ai.dream.mapper.ICollectionMapper">
+
+    <select id="addnew" resultType="Product" parameterType="Long">
+   select pid, product_name, db_source from product where pid=#{pid}
+  </select>
+
+
+    <select id="queryAll" resultType="netCollection">
+   select id, title, morder, hot, create_date,state from net_collection
+  </select>
+
+    <insert id="addnew" parameterType="netCollection">
+   INSERT INTO net_collection(id, title, morder, hot, create_date,state) VALUES(#{productName}, DATABASE())
+  </insert>
+
+</mapper>
