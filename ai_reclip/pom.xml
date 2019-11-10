@@ -20,6 +20,7 @@
         <module>../d_travel_pri</module>
         <module>../d_zuul_cust</module>
         <module>../d_register_bak</module>
+        <module>../d_common</module>
     </modules>
 
     <packaging>pom</packaging>

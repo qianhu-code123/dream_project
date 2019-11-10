@@ -4,17 +4,24 @@
 
 <mapper namespace="com.ai.dream.mapper.ICollectionMapper">
 
-    <select id="addnew" resultType="Product" parameterType="Long">
-   select pid, product_name, db_source from product where pid=#{pid}
-  </select>
+    <select id="queryAll" resultType="java.util.Map">
+        select id, title, morder, hot, create_date,state from net_collection where state = 'U'
+    </select>
 
+    <select id="queryById" resultType="java.util.Map">
+        select id, title, morder, hot, create_date,state from net_collection where id= #{id} and state = 'U'
+    </select>
 
-    <select id="queryAll" resultType="netCollection">
-   select id, title, morder, hot, create_date,state from net_collection
-  </select>
+    <insert id="addnew" parameterType="java.util.Map">
+        INSERT INTO net_collection(id, title, morder, hot, create_date,state) VALUES(#{id},#{title},#{morder},#{hot},#{create_date},#{state})
+    </insert>
 
-    <insert id="addnew" parameterType="netCollection">
-   INSERT INTO net_collection(id, title, morder, hot, create_date,state) VALUES(#{productName}, DATABASE())
-  </insert>
+    <update id="delById" parameterType="java.util.Map">
+        update net_collection set state = 'E' where id = #{id}
+    </update>
+
+    <update id="updnew" parameterType="java.util.Map">
+        update net_collection set title = #{title} ,morder = #{morder},hot = #{hot},create_date = #{create_date} where id=#{id} and state='U'
+    </update>
 
 </mapper>

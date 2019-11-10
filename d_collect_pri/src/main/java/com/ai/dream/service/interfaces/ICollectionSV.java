@@ -7,12 +7,15 @@ import java.util.Map;
 
 public interface ICollectionSV {
 
-     List<netCollection> queryAll();
+     List<Map<String,Object>> queryAll() throws Exception;
 
-     boolean addnew(netCollection collection);
+     Map<String,Object> queryById(Map<String,Object> parmMap) throws Exception;
 
-     boolean delById(long id);
+     boolean addnew(Map<String,Object> parmMap) throws Exception;
 
-     boolean updnew(netCollection collection);
+     boolean delById(Map<String,Object> parmMap) throws Exception;
+
+     boolean updnew(Map<String,Object> parmMap) throws Exception;
+
 
 }

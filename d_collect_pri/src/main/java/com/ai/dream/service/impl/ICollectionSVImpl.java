@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ICollectionSVImpl implements ICollectionSV {
@@ -15,22 +16,27 @@ public class ICollectionSVImpl implements ICollectionSV {
     private ICollectionMapper mapper;
 
     @Override
-    public List<netCollection> queryAll() {
+    public List<Map<String,Object>> queryAll() throws Exception {
         return mapper.queryAll();
     }
 
     @Override
-    public boolean addnew(netCollection collection) {
-        return mapper.addnew(collection);
+    public Map<String, Object> queryById(Map<String, Object> parmMap) throws Exception {
+        return mapper.queryById(parmMap);
     }
 
     @Override
-    public boolean delById(long id) {
-        return mapper.delById(id);
+    public boolean addnew(Map<String,Object> parmMap) throws Exception {
+        return mapper.addnew(parmMap);
     }
 
     @Override
-    public boolean updnew(netCollection collection) {
-        return mapper.updnew(collection);
+    public boolean delById(Map<String,Object> parmMap) throws Exception {
+        return mapper.delById(parmMap);
+    }
+
+    @Override
+    public boolean updnew(Map<String,Object> parmMap) throws Exception {
+        return mapper.updnew(parmMap);
     }
 }
