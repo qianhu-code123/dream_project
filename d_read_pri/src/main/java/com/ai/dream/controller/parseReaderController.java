@@ -3,6 +3,7 @@ package com.ai.dream.controller;
 import com.ai.dream.read.services.interfaces.INetReaderSV;
 import com.ai.dream.utils.EmptyUtil;
 import com.ai.dream.utils.JsonTools;
+import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,7 +29,7 @@ public class parseReaderController {
     private INetReaderSV isv;
 
     @RequestMapping("/read/parse/query")
-    public String parseRead(HttpServletRequest request) throws Exception{
+    public Object parseRead(HttpServletRequest request) throws Exception{
         log.info("请求参数："+request.getParameter("params"));
         String prefix = "http://www.dingdiann.com/searchbook.php?";
         String url = "";
@@ -41,8 +43,12 @@ public class parseReaderController {
                 if(!EmptyUtil.isEmpty(relMap.get("keyword"))){
                     url = prefix + "keyword="+relMap.get("keyword");
                     doc = Jsoup.connect(url).get();
-                    Elements elts = doc.getElementsByAttribute("novelslist2");
-                    log.info(elts.html());
+                    Element elt = doc.getElementById("main");
+                    Elements elts = elt.select("ul>li");
+                    relMap.put("data",elts.toString());
+
+                    //JsonTools.object2Json(relMap)
+                    return elts.toString();
                 }
 
             }
@@ -53,6 +59,65 @@ public class parseReaderController {
 
         return null;
     }
+
+
+    @RequestMapping("/ddk*")
+    public Object parseCatlog(HttpServletRequest request) throws Exception{
+
+        log.info("请求path： "+request.getServletPath());
+        Map<String,Object> relMap = new HashMap<>();
+        String dir = request.getServletPath();
+        String prefix = "http://www.dingdiann.com";
+        String url = "";
+        Document doc ;
+        StringBuffer stringBuffer = new StringBuffer("");
+        try {
+            url = prefix + dir;
+            doc = Jsoup.connect(url).get();
+            //简介部分
+            Elements jj = doc.getElementsByClass("maininfo");
+            log.info("简介："+jj.toString());
+
+            Elements content = doc.getElementsByClass("box_con").select("div>dl").select("dd");
+            for(int i=1;i<100;i++){
+                stringBuffer = stringBuffer.append(content.get(i));
+            }
+            log.info("内容："+stringBuffer.toString());
+
+
+            return stringBuffer.toString();
+
+        }catch (Exception e){
+            log.error("失败原因: ",e);
+            throw e;
+        }
+    }
+
+    @RequestMapping("/ddk*/**.html")
+    public Object parseBook(HttpServletRequest request) throws Exception{
+
+        log.info("请求path： "+request.getServletPath());
+        Map<String,Object> relMap = new HashMap<>();
+        String dir = request.getServletPath();
+        String prefix = "http://www.dingdiann.com";
+        String url = "";
+        Document doc ;
+        StringBuffer stringBuffer = new StringBuffer("");
+        try {
+            url = prefix + dir;
+            doc = Jsoup.connect(url).get();
+            //简介部分
+            Element jj = doc.getElementById("content");
+            log.info("内容："+jj.toString());
+
+            return jj.toString();
+
+        }catch (Exception e){
+            log.error("失败原因: ",e);
+            throw e;
+        }
+    }
+
 
 
 
