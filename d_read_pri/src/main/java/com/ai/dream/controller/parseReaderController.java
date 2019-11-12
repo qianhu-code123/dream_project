@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,7 +30,7 @@ public class parseReaderController {
     private INetReaderSV isv;
 
     @RequestMapping("/read/parse/query")
-    public Object parseRead(HttpServletRequest request) throws Exception{
+    public Map<String,Object> parseRead(HttpServletRequest request) throws Exception{
         log.info("请求参数："+request.getParameter("params"));
         String prefix = "http://www.dingdiann.com/searchbook.php?";
         String url = "";
@@ -46,9 +47,9 @@ public class parseReaderController {
                     Element elt = doc.getElementById("main");
                     Elements elts = elt.select("ul>li");
                     relMap.put("data",elts.toString());
+                    /*jsonStr = JsonTools.object2Json(relMap);*/
 
-                    //JsonTools.object2Json(relMap)
-                    return elts.toString();
+                    return relMap;
                 }
 
             }
@@ -61,8 +62,8 @@ public class parseReaderController {
     }
 
 
-    @RequestMapping("/ddk*")
-    public Object parseCatlog(HttpServletRequest request) throws Exception{
+    @RequestMapping("/read/ddk*")
+    public Map<String,Object> parseCatlog(HttpServletRequest request) throws Exception{
 
         log.info("请求path： "+request.getServletPath());
         Map<String,Object> relMap = new HashMap<>();
@@ -77,15 +78,15 @@ public class parseReaderController {
             //简介部分
             Elements jj = doc.getElementsByClass("maininfo");
             log.info("简介："+jj.toString());
-
+            relMap.put("jj",jj.toString());
             Elements content = doc.getElementsByClass("box_con").select("div>dl").select("dd");
-            for(int i=1;i<100;i++){
+            for(int i=1;i<content.size();i++){
                 stringBuffer = stringBuffer.append(content.get(i));
             }
             log.info("内容："+stringBuffer.toString());
+            relMap.put("catlog",stringBuffer.toString());
 
-
-            return stringBuffer.toString();
+            return relMap;
 
         }catch (Exception e){
             log.error("失败原因: ",e);
@@ -93,8 +94,8 @@ public class parseReaderController {
         }
     }
 
-    @RequestMapping("/ddk*/**.html")
-    public Object parseBook(HttpServletRequest request) throws Exception{
+    @RequestMapping("/read/ddk*/**.html")
+    public Map<String, Object> parseBook(HttpServletRequest request) throws Exception{
 
         log.info("请求path： "+request.getServletPath());
         Map<String,Object> relMap = new HashMap<>();
@@ -109,8 +110,8 @@ public class parseReaderController {
             //简介部分
             Element jj = doc.getElementById("content");
             log.info("内容："+jj.toString());
-
-            return jj.toString();
+            relMap.put("content",jj.toString());
+            return relMap;
 
         }catch (Exception e){
             log.error("失败原因: ",e);
