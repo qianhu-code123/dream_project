@@ -4,7 +4,22 @@ server:
 spring:
   application:
     name: dream-server
-
+  session:
+    store-type: redis
+    redis:
+      flush-mode: on_save
+      namespace: spring:session
+  redis:
+    cluster:
+      nodes: 49.235.135.75:10000,49.235.135.75:10001,49.235.135.75:10002,49.235.135.75:10003,49.235.135.75:10004,49.235.135.75:10005
+    timeout: 2000
+    database: 0
+  jedis:
+    pool:
+      max-active: 8
+      max-wait: -1
+      max-idle: 8
+      min-idle: 0
 
 eureka:
   client:
@@ -17,18 +32,20 @@ eureka:
     instanceId: ${spring.application.name}:${server.port} # 等价于microservice-product:8001
     prefer-ip-address: true #访问路径就会显示成IP地址
 
+
+
 zuul:
   routes:
     dream-read:
       path: /read/**
       serviceId: read-server
       stripPrefix: false
-      sensitiveHeaders: Access-Control-Allow-Origin,Access-Control-Allow-Methods
+      sensitiveHeaders: "*"
     dream-collect:
       path: /collect/**
       serviceId: collection-server
       stripPrefix: false
-      sensitiveHeaders: Access-Control-Allow-Origin,Access-Control-Allow-Methods
+      sensitiveHeaders: "*"
   host:
     connect-timeout-millis: 15000   #HTTP连接超时大于Hystrix的超时时间
     socket-timeout-millis: 60000    #socket超时
