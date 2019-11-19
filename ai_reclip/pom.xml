@@ -21,6 +21,7 @@
         <module>../d_zuul_cust</module>
         <module>../d_register_bak</module>
         <module>../d_common</module>
+        <module>../d_sec_pri</module>
     </modules>
 
     <packaging>pom</packaging>

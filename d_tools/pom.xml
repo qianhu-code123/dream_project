@@ -13,5 +13,11 @@
     <groupId>com.ai.dream</groupId>
     <artifactId>d_tools</artifactId>
 
-
+    <dependencies>
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+            <version>1.6</version>
+        </dependency>
+    </dependencies>
 </project>

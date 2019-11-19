@@ -21,6 +21,7 @@ import org.springframework.web.servlet.support.RequestContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,8 +37,6 @@ public class CollectController {
     @RequestMapping("/collect/queryAll")
     public List<Map<String,Object>> queryAll() throws Exception{
         try{
-            String sessionId = RequestContextHolder.currentRequestAttributes().getSessionId();
-            log.info("sessionId = "+sessionId);
             return isv.queryAll();
         }catch (Exception e){
             log.error("查询异常：",e);
@@ -49,8 +48,6 @@ public class CollectController {
     @RequestMapping("/collect/queryById")
     public Map<String,Object> queryById(HttpServletRequest request) throws Exception{
         log.info("请求参数："+request.getParameter("params"));
-        String sessionId = RequestContextHolder.currentRequestAttributes().getSessionId();
-        log.info("sessionId = "+sessionId);
         String jsonStr = "";
         Map<String,Object> relMap = new HashMap<>();
         Map<String,Object> map = new HashMap<>();
@@ -77,8 +74,15 @@ public class CollectController {
     @RequestMapping("/collect/addnew")
     public boolean addnew(HttpServletRequest request)throws Exception{
         log.info("请求参数："+request.getParameter("params"));
+        /*Enumeration headerNames = request.getHeaderNames();
+        while (headerNames.hasMoreElements()) {
+            String name = (String) headerNames.nextElement();
+            //根据名称获取请求头的值
+            String value = request.getHeader(name);
+           log.info(name+"---"+value);
+        }
         String sessionId = RequestContextHolder.currentRequestAttributes().getSessionId();
-        log.info("sessionId = "+sessionId);
+        log.info("sessionId = "+sessionId);*/
         //id, title, morder, hot, create_date,state
         boolean flag = false;
         Map<String,Object> relMap = new HashMap<>();

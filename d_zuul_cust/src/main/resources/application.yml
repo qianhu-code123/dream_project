@@ -4,22 +4,17 @@ server:
 spring:
   application:
     name: dream-server
-  session:
-    store-type: redis
-    redis:
-      flush-mode: on_save
-      namespace: spring:session
   redis:
     cluster:
       nodes: 49.235.135.75:10000,49.235.135.75:10001,49.235.135.75:10002,49.235.135.75:10003,49.235.135.75:10004,49.235.135.75:10005
     timeout: 2000
     database: 0
-  jedis:
-    pool:
-      max-active: 8
-      max-wait: -1
-      max-idle: 8
-      min-idle: 0
+    jedis:
+      pool:
+        max-active: 5000
+        max-wait: 10000
+        max-idle: 5000
+        min-idle: 0
 
 eureka:
   client:
