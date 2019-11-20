@@ -5,6 +5,9 @@
     <select id="queryUser" parameterType="java.util.Map" resultType="java.util.Map">
         select * from sec_user where mobile = #{mobile} and state = 'U'
     </select>
+    <select id="queryByUsername" parameterType="java.util.Map" resultType="java.util.Map">
+        select * from sec_user where username = #{username} and state = 'U'
+    </select>
     <select id="queryAllUser"  resultType="java.util.Map">
         select * from sec_user where state = 'U'
     </select>
@@ -16,5 +19,9 @@
     <update id="deleteUser" parameterType="java.util.Map">
         update sec_user set state = 'E' where mobile = #{mobile}
     </update>
+
+
+
+
 
 </mapper>
