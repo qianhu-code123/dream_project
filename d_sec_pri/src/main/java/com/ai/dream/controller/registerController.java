@@ -28,11 +28,11 @@ public class registerController {
     IRegisterSV isv;
 
     @RequestMapping("/user/saveUser")
-    public JSONObject saveUser(HttpServletRequest request) throws Exception{
+    public String saveUser(HttpServletRequest request) throws Exception{
         log.info("请求参数："+request.getParameter("params"));
         Map<String,Object> relMap = new HashMap<>();
         String jsonStr = "";
-        JSONObject jsonObject = new JSONObject();
+        Map<String,Object> finalMap = new HashMap<>();
         boolean flag = false;
         try {
             if(!EmptyUtil.isEmpty(request.getParameter("params"))){
@@ -47,78 +47,92 @@ public class registerController {
                 if(EmptyUtil.isEmpty(relMap.get("mobile"))){
                     throw new Exception("手机号码不能为空");
                 }
-                relMap.put("mobile",relMap.get("mobile"));
+                relMap.put("mobile",relMap.get("mobile").toString());
                 Map<String,Object> userMap = isv.queryUser(relMap);
                 if(null!=userMap && userMap.size() > 0){
-                    throw new Exception("用户已存在!");
+                    throw new Exception("手机号码已绑定用户，请更换手机号码!");
                 }
                 relMap.put("user_id",Long.parseLong(SequenceUtil.getSeq()));
                 relMap.put("username",relMap.get("username").toString());
-                relMap.put("passwd",relMap.get("mobile").toString());
-                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:si:mm");
+                relMap.put("passwd",relMap.get("passwd").toString());
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:ss:mm");
                 java.util.Date uDate = new Date();
                 String str = format.format(uDate);
-                java.sql.Timestamp timestamp = new java.sql.Timestamp(format.parse(str).getTime());
-                relMap.put("create_date",timestamp);
-                relMap.put("expire_date",new java.sql.Timestamp(format.parse("2099-12-12 00:00:00").getTime()));
+                uDate = format.parse(str);
+                relMap.put("create_date",uDate);
+                relMap.put("expire_date",format.parse("2099-12-31 00:00:00"));
                 relMap.put("state","U");
                 flag = isv.saveUser(relMap);
-                jsonObject.put("code",flag == true ?"0000":"-1");
-                jsonObject.put("msg",flag == true?"注册成功":"失败");
-                jsonObject.put("data","成功");
-                jsonObject.put("count",1);
+                finalMap.put("code",flag?"0000":"-1");
+                finalMap.put("msg",flag?"注册成功":"失败");
+                finalMap.put("data","成功");
+                finalMap.put("count",1);
+                jsonStr = JsonTools.object2Json(finalMap);
             }
         }catch (Exception e){
             log.error("失败原因： ",e);
             throw e;
         }
-        return jsonObject;
+        return jsonStr;
     }
 
     @RequestMapping("/user/delUser")
-    public JSONObject delUser(HttpServletRequest request) throws Exception{
-        log.info("请求参数："+request.getParameter("params"));
-        try{
-
-
+    public String delUser(HttpServletRequest request) throws Exception{
+        Map<String,Object> relMap = new HashMap<>();
+        String jsonStr = "";
+        Map<String,Object> finalMap = new HashMap<>();
+        boolean flag = false;
+        try {
+            if(!EmptyUtil.isEmpty(request.getParameter("params"))){
+                jsonStr = request.getParameter("params");
+                relMap = JsonTools.json2Map(jsonStr);
+            }
+            if(EmptyUtil.isEmpty(relMap.get("mobile"))){
+                throw new Exception("mobile为空");
+            }
+            relMap.put("mobile",relMap.get("mobile"));
+            flag = isv.deleteUser(relMap);
+            finalMap.put("code",flag ?"0000":"-1");
+            finalMap.put("msg",flag?"删除成功":"失败");
+            finalMap.put("data","");
+            finalMap.put("count",1);
+            jsonStr = JsonTools.object2Json(finalMap);
         }catch (Exception e){
             log.error("失败原因： ",e);
             throw e;
         }
-
-
-
-        return null;
+        return jsonStr;
     }
 
 
     @RequestMapping("/user/queryAll")
-    public JSONObject queryAll(HttpServletRequest request) throws Exception{
+    public String queryAll(HttpServletRequest request) throws Exception{
         log.info("请求参数："+request.getParameter("params"));
-        JSONObject jsonObject = new JSONObject();
-        boolean flag = true;
+        Map<String,Object> finalMap = new HashMap<>();
+        String jsonStr = "";
         try{
             List<Map<String,Object>> rel = isv.queryAllUser();
             if(null == rel || rel.size() == 0){
-                flag = false;
+
                 throw new Exception("查询失败，信息为空");
             }
-            jsonObject.put("code",flag == true ?"0000":"-1");
-            jsonObject.put("msg",flag == true?"查询成功":"失败");
-            jsonObject.put("data",rel);
-            jsonObject.put("count",rel.size());
+            finalMap.put("code","0000");
+            finalMap.put("msg","查询成功");
+            finalMap.put("data",rel);
+            finalMap.put("count",rel.size());
+            jsonStr = JsonTools.object2Json(finalMap);
         }catch (Exception e){
             log.error("失败原因： ",e);
             throw e;
         }
-        return jsonObject;
+        return jsonStr;
     }
 
 
     @RequestMapping("/user/queryUser")
-    public JSONObject queryUser(HttpServletRequest request) throws Exception{
+    public String queryUser(HttpServletRequest request) throws Exception{
         log.info("请求参数："+request.getParameter("params"));
-        JSONObject jsonObject = new JSONObject();
+        Map<String,Object> finalMap = new HashMap<>();
         Map<String,Object> relMap = new HashMap<>();
         String jsonStr = "";
         boolean flag = true;
@@ -136,15 +150,16 @@ public class registerController {
                 flag = false;
                 throw new Exception("查询失败，信息为空");
             }
-            jsonObject.put("code",flag == true ?"0000":"-1");
-            jsonObject.put("msg",flag == true?"查询成功":"失败");
-            jsonObject.put("data",rel);
-            jsonObject.put("count",rel.size());
+            finalMap.put("code","0000");
+            finalMap.put("msg","查询成功");
+            finalMap.put("data",rel);
+            finalMap.put("count",1);
+            jsonStr = JsonTools.object2Json(finalMap);
         }catch (Exception e){
             log.error("失败原因： ",e);
             throw e;
         }
-        return jsonObject;
+        return jsonStr;
     }
 
 }
