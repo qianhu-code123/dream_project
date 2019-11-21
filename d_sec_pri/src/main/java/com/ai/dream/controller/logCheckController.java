@@ -25,7 +25,7 @@ public class logCheckController {
     @Autowired
     JedisCluster jedisCluster;
 
-    @RequestMapping("/login/checkLogin")
+    @RequestMapping("/user/checkLogin")
     public String checkLogin(HttpServletRequest request) throws Exception{
         Map<String,Object> relMap = new HashMap<>();
         Map<String,Object> finalMap = new HashMap<>();
@@ -46,14 +46,16 @@ public class logCheckController {
                 long user_id = (long) teMap.get("user_id");
                 String token = KeyUtils.genUniqueKey();
                 String redis_key = "TOKEN_" + user_id;
-                jedisCluster.set(redis_key,token);
+                // NX是不存在时才set， XX是存在时才set， EX是秒，PX是毫秒
+                jedisCluster.set(redis_key,token,"NX","EX",86400l);
+                teMap.put("token",token);
                 finalMap.put("code","0000");
-                finalMap.put("msg","登录成功");
-                finalMap.put("data",token);
+                finalMap.put("msg","success");
+                finalMap.put("data",teMap);
                 finalMap.put("count",1);
             }else{
                 finalMap.put("code","-1");
-                finalMap.put("msg","用户名密码不匹配");
+                finalMap.put("msg","fail");
                 finalMap.put("data","");
                 finalMap.put("count",1);
             }

@@ -10,16 +10,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-public class shallGamesCotroller  {
-    Logger log = LoggerFactory.getLogger(shallGamesCotroller.class);
+public class ResourceShallCotroller {
+    Logger log = LoggerFactory.getLogger(ResourceShallCotroller.class);
 
-    @RequestMapping("/shall/games/save")
+    @RequestMapping("/shall/game/save")
     public Map<String,Object> save(HttpServletRequest request) throws  Exception{
         log.info("请求参数："+request.getParameter("params"));
         Map<String ,Object> relMap = new HashMap<>();
         String fialStr = "";
         try {
-
 
 
         }catch (Exception e){

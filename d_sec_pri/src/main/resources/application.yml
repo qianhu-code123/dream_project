@@ -9,6 +9,12 @@ mybatis:
 spring:
   application:
     name: sec-server #这个很重要，这在以后的服务与服务之间相互调用一般都是根据这个name
+  http:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource            # 当前数据源操作类型
     driver-class-name: com.mysql.cj.jdbc.Driver             # mysql驱动包
@@ -22,7 +28,7 @@ spring:
       max-wait-millis: 150                       # 等待连接获取的最大超时时间
   redis:
     cluster:
-      nodes: 49.235.135.75:6100,49.235.135.75:6101,49.235.135.75:6102,49.235.135.75:6103,49.235.135.75:6104,49.235.135.75:6105
+      nodes: 49.235.135.75:7001,49.235.135.75:7002,49.235.135.75:7003,49.235.135.75:7004,49.235.135.75:7005,49.235.135.75:7006
     timeout: 2000
     database: 0
     jedis:

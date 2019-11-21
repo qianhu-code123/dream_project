@@ -4,9 +4,15 @@ server:
 spring:
   application:
     name: dream-server
+  http:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+
   redis:
     cluster:
-      nodes: 49.235.135.75:10000,49.235.135.75:10001,49.235.135.75:10002,49.235.135.75:10003,49.235.135.75:10004,49.235.135.75:10005
+      nodes: 49.235.135.75:7001,49.235.135.75:7002,49.235.135.75:7003,49.235.135.75:7004,49.235.135.75:7005,49.235.135.75:7006
     timeout: 2000
     database: 0
     jedis:
@@ -39,6 +45,11 @@ zuul:
     dream-collect:
       path: /collect/**
       serviceId: collection-server
+      stripPrefix: false
+      sensitiveHeaders: "*"
+    sec-collect:
+      path: /user/**
+      serviceId: sec-server
       stripPrefix: false
       sensitiveHeaders: "*"
   host:

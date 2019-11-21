@@ -64,8 +64,8 @@ public class registerController {
                 relMap.put("state","U");
                 flag = isv.saveUser(relMap);
                 finalMap.put("code",flag?"0000":"-1");
-                finalMap.put("msg",flag?"注册成功":"失败");
-                finalMap.put("data","成功");
+                finalMap.put("msg",flag?"success":"fail");
+                finalMap.put("data","");
                 finalMap.put("count",1);
                 jsonStr = JsonTools.object2Json(finalMap);
             }
@@ -93,7 +93,7 @@ public class registerController {
             relMap.put("mobile",relMap.get("mobile"));
             flag = isv.deleteUser(relMap);
             finalMap.put("code",flag ?"0000":"-1");
-            finalMap.put("msg",flag?"删除成功":"失败");
+            finalMap.put("msg",flag?"success":"fail");
             finalMap.put("data","");
             finalMap.put("count",1);
             jsonStr = JsonTools.object2Json(finalMap);
@@ -117,7 +117,7 @@ public class registerController {
                 throw new Exception("查询失败，信息为空");
             }
             finalMap.put("code","0000");
-            finalMap.put("msg","查询成功");
+            finalMap.put("msg","success");
             finalMap.put("data",rel);
             finalMap.put("count",rel.size());
             jsonStr = JsonTools.object2Json(finalMap);
@@ -151,7 +151,7 @@ public class registerController {
                 throw new Exception("查询失败，信息为空");
             }
             finalMap.put("code","0000");
-            finalMap.put("msg","查询成功");
+            finalMap.put("msg","success");
             finalMap.put("data",rel);
             finalMap.put("count",1);
             jsonStr = JsonTools.object2Json(finalMap);
