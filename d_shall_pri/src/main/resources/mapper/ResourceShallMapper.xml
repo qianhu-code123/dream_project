@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ai.dream.shall.mapper.ResourceShallMapper">
+    <select id="queryResource" parameterType="java.util.Map" resultType="java.util.Map">
+        select * from resource_shall where res_id = #{res_id} and state = 'U'
+    </select>
+
+    <select id="queryAllResource"  resultType="java.util.Map">
+        select * from resource_shall where  state = 'U'
+    </select>
+
+    <select id="queryResUser" parameterType="java.util.Map" resultType="java.util.Map">
+        select * from resource_user where user_id = #{user_id} and state = 'U'
+    </select>
+
+    <insert id="saveResource" parameterType="java.util.Map">
+        insert into resource_shall(res_id, res_name, res_url, res_check, create_date,expire_date, state) values(#{res_id}, #{res_name}, #{res_url}, #{res_check}, #{create_date},#{expire_date}, #{state})
+    </insert>
+
+    <insert id="saveResUser" parameterType="java.util.Map">
+        insert into resource_user(user_id, shall_times, state) values(#{user_id}, #{shall_times}, #{state})
+    </insert>
+
+    <update id="updateResource" parameterType="java.util.Map">
+        update updateResource set res_check = #{res_check} , create_date = #{create_date}, expire_date = #{expire_date}, state = #{state} where res_id = #{res_id}
+    </update>
+
+    <update id="updateResUser" parameterType="java.util.Map">
+        update resource_user set shall_times = #{shall_times}, state = #{state} where user_id = #{user_id}
+    </update>
+
+</mapper>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ai.dream.sec.mapper.IRegisterMapper">
+    <select id="queryUser" parameterType="java.util.Map" resultType="java.util.Map">
+        select * from sec_user where mobile = #{mobile} and state = 'U'
+    </select>
+    <select id="queryByUsername" parameterType="java.util.Map" resultType="java.util.Map">
+        select * from sec_user where username = #{username} and state = 'U'
+    </select>
+    <select id="queryAllUser"  resultType="java.util.Map">
+        select * from sec_user where state = 'U'
+    </select>
+
+    <insert id="saveUser" parameterType="java.util.Map">
+        INSERT INTO sec_user(user_id, username, passwd, mobile, create_date,expire_date,state) VALUES(#{user_id}, #{username}, #{passwd}, #{mobile}, #{create_date},#{expire_date}, #{state})
+    </insert>
+
+    <update id="deleteUser" parameterType="java.util.Map">
+        update sec_user set state = 'E' where mobile = #{mobile}
+    </update>
+
+
+
+
+
+</mapper>

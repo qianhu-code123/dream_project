@@ -1,0 +1,60 @@
+server:
+  port: 5000
+
+spring:
+  application:
+    name: dream-server
+  http:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+
+  redis:
+    cluster:
+      nodes: 49.235.135.75:7001,49.235.135.75:7002,49.235.135.75:7003,49.235.135.75:7004,49.235.135.75:7005,49.235.135.75:7006
+    timeout: 2000
+    database: 0
+    jedis:
+      pool:
+        max-active: 5000
+        max-wait: 10000
+        max-idle: 5000
+        min-idle: 0
+
+eureka:
+  client:
+    registerWithEureka: true # 服务注册开关
+    fetchRegistry: true # 服务发现开关
+    serviceUrl: # 注册到哪一个Eureka Server服务注册中心，多个中间用逗号分隔
+      #defaultZone: http://localhost:6001/eureka
+      defaultZone: http://unique-server:10000/eureka/,http://unique-server-bak:10001/eureka/
+  instance:
+    instanceId: ${spring.application.name}:${server.port} # 等价于microservice-product:8001
+    prefer-ip-address: true #访问路径就会显示成IP地址
+
+
+
+zuul:
+  routes:
+    dream-read:
+      path: /read/**
+      serviceId: read-server
+      stripPrefix: false
+      sensitiveHeaders: "*"
+    dream-collect:
+      path: /collect/**
+      serviceId: collection-server
+      stripPrefix: false
+      sensitiveHeaders: "*"
+    sec-collect:
+      path: /user/**
+      serviceId: sec-server
+      stripPrefix: false
+      sensitiveHeaders: "*"
+  host:
+    connect-timeout-millis: 15000   #HTTP连接超时大于Hystrix的超时时间
+    socket-timeout-millis: 60000    #socket超时
+ribbon:        #设置ribbon的超时时间小于zuul的超时时间,不然会报504的错误
+  ReadTimeout: 10000
+  ConnectTimeout: 10000

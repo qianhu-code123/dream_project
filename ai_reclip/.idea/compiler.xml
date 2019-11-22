@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="d_sec_pri" />
+        <module name="d_collect_pri" />
+        <module name="d_twitur_pri" />
+        <module name="d_common" />
+        <module name="d_register_bak" />
+        <module name="d_tools" />
+        <module name="d_read_pri" />
+        <module name="worknote_pri" />
+        <module name="d_travel_pri" />
+        <module name="d_zuul_cust" />
+        <module name="d_shall_pri" />
+        <module name="d_register" />
+        <module name="d_online_pri" />
+        <module name="api" />
+      </profile>
+    </annotationProcessing>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="api" options="-parameters" />
+      <module name="d_collect_pri" options="-parameters" />
+      <module name="d_common" options="-parameters" />
+      <module name="d_online_pri" options="-parameters" />
+      <module name="d_read_pri" options="-parameters" />
+      <module name="d_register" options="-parameters" />
+      <module name="d_register_bak" options="-parameters" />
+      <module name="d_sec_pri" options="-parameters" />
+      <module name="d_shall_pri" options="-parameters" />
+      <module name="d_tools" options="-parameters" />
+      <module name="d_travel_pri" options="-parameters" />
+      <module name="d_twitur_pri" options="-parameters" />
+      <module name="d_zuul_cust" options="-parameters" />
+      <module name="worknote_pri" options="-parameters" />
+    </option>
+  </component>
+</project>
