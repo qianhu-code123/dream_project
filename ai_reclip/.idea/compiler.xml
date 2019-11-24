@@ -6,6 +6,7 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="html" />
         <module name="d_sec_pri" />
         <module name="d_collect_pri" />
         <module name="d_twitur_pri" />
@@ -38,6 +39,7 @@
       <module name="d_travel_pri" options="-parameters" />
       <module name="d_twitur_pri" options="-parameters" />
       <module name="d_zuul_cust" options="-parameters" />
+      <module name="html" options="-parameters" />
       <module name="worknote_pri" options="-parameters" />
     </option>
   </component>

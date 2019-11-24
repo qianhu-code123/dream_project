@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="Encoding" defaultCharsetForPropertiesFiles="UTF-8">
+  <component name="Encoding">
     <file url="file://$PROJECT_DIR$" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/html" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/../d_collect_pri" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/../d_common" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/../d_online_pri" charset="UTF-8" />
@@ -9,16 +10,12 @@
     <file url="file://$PROJECT_DIR$/../d_register" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/../d_register_bak" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/../d_sec_pri" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/../d_sec_pri/src/main/java/com/ai/dream/config/RedisClusterConfig.java" charset="GBK" />
     <file url="file://$PROJECT_DIR$/../d_shall_pri" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/../d_tools" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/../d_travel_pri" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/../d_twitur_pri" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/../d_zuul_cust" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/../d_zuul_cust/src/main/java/com/ai/dream/Filter" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/../d_zuul_cust/src/main/java/com/ai/dream/config/RedisClusterConfig.java" charset="GBK" />
     <file url="file://$PROJECT_DIR$/../dapi" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/../worknote_pri" charset="UTF-8" />
-    <file url="PROJECT" charset="UTF-8" />
   </component>
 </project>

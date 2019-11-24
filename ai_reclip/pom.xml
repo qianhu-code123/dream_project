@@ -22,6 +22,7 @@
         <module>../d_register_bak</module>
         <module>../d_common</module>
         <module>../d_sec_pri</module>
+        <module>html</module>
     </modules>
 
     <packaging>pom</packaging>

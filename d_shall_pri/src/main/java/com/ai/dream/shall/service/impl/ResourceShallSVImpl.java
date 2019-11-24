@@ -36,8 +36,8 @@ public class ResourceShallSVImpl implements IResourceShallSV {
     }
 
     @Override
-    public List<Map<String, Object>> queryAllResource(Map<String, Object> paraMap) throws Exception {
-        return sv.queryAllResource(paraMap);
+    public List<Map<String, Object>> queryAllResource() throws Exception {
+        return sv.queryAllResource();
     }
 
     @Override

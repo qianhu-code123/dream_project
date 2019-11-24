@@ -21,15 +21,7 @@ spring:
       initial-size: 5                            # 初始化连接数
       max-total: 5                               # 最大连接数
       max-wait-millis: 150                       # 等待连接获取的最大超时时间
-  redis:
-    cluster:
-      nodes: 49.235.135.75:10000,49.235.135.75:10001,49.235.135.75:10002,49.235.135.75:10003,49.235.135.75:10004,49.235.135.75:10005
-    jedis:
-      pool:
-        max-active: 8
-        max-idle: -1
-        max-wait: 0
-        min-idle: 8
+
 
 eureka:
   client:
