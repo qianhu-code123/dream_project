@@ -1,6 +1,6 @@
 /**
  * date:2019/06/10
- * author:Mr.Chung
+ * author:qianhu
  * description:layuimini 框架扩展
  */
 
@@ -93,6 +93,7 @@ layui.define(["element", "jquery"], function (exports) {
                 '<h1>' + data.title + '</h1>\n' +
                 '</a>';
             $('.layui-layout-admin .layui-logo').html(html);
+
         };
 
         /**

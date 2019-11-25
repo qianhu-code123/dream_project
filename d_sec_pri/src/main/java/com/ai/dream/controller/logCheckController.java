@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import redis.clients.jedis.JedisCluster;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,7 +27,8 @@ public class logCheckController {
     JedisCluster jedisCluster;
 
     @RequestMapping("/user/checkLogin")
-    public String checkLogin(HttpServletRequest request) throws Exception{
+    public String checkLogin(HttpServletRequest request, HttpSession session) throws Exception{
+        String callback = (String)request.getParameter("callback");
         Map<String,Object> relMap = new HashMap<>();
         Map<String,Object> finalMap = new HashMap<>();
         String jsonStr = "";
@@ -46,8 +48,9 @@ public class logCheckController {
                 String redis_key = "TOKEN_" + user_id;
                 // NX是不存在时才set， XX是存在时才set， EX是秒，PX是毫秒
                 jedisCluster.set(redis_key,token,"NX","EX",86400L);
+                session.setAttribute("user",teMap);
                 teMap.put("token",token);
-                finalMap.put("code","0000");
+                finalMap.put("code",0);
                 finalMap.put("msg","success");
                 finalMap.put("data",teMap);
                 finalMap.put("count",1);
@@ -61,7 +64,8 @@ public class logCheckController {
             log.error("失败原因：",e);
             throw e;
         }
-        return JsonTools.object2Json(finalMap);
+
+        return callback + "(" + JsonTools.object2Json(finalMap) + ")";
     }
 
 

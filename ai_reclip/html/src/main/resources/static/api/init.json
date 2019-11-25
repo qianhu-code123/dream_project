@@ -8,7 +8,7 @@
     "href": "page/welcome-1.html?mpi=m-p-i-0"
   },
   "logoInfo": {
-    "title": "LayuiMini",
+    "title": "D_REAM",
     "image": "images/logo.png",
     "href": ""
   },
@@ -50,7 +50,7 @@
           "target": "_self"
         },
         {
-          "title": "表格示例",
+          "title": "用户列表",
           "href": "page/table.html",
           "icon": "fa fa-file-text",
           "target": "_self"

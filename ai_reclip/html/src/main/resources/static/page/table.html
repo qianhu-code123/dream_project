@@ -19,27 +19,21 @@
                 <form class="layui-form layui-form-pane" action="">
                     <div class="layui-form-item">
                         <div class="layui-inline">
-                            <label class="layui-form-label">用户姓名</label>
+                            <label class="layui-form-label">用户编号</label>
                             <div class="layui-input-inline">
                                 <input type="text" name="username" autocomplete="off" class="layui-input">
                             </div>
                         </div>
                         <div class="layui-inline">
-                            <label class="layui-form-label">用户性别</label>
+                            <label class="layui-form-label">用户名称</label>
                             <div class="layui-input-inline">
                                 <input type="text" name="sex" autocomplete="off" class="layui-input">
                             </div>
                         </div>
                         <div class="layui-inline">
-                            <label class="layui-form-label">用户城市</label>
+                            <label class="layui-form-label">用户手机</label>
                             <div class="layui-input-inline">
                                 <input type="text" name="city" autocomplete="off" class="layui-input">
-                            </div>
-                        </div>
-                        <div class="layui-inline">
-                            <label class="layui-form-label">用户职业</label>
-                            <div class="layui-input-inline">
-                                <input type="text" name="classify" autocomplete="off" class="layui-input">
                             </div>
                         </div>
                         <div class="layui-inline">
@@ -67,22 +61,21 @@
         var $ = layui.jquery,
             form = layui.form,
             table = layui.table;
-
+        //http://localhost:1234/index.html?username=admin&passwd=admin&token=ee7dc874ca09b0043f09693564b41262
+        var token = window.top.document.referrer.split("&")[2].split("=")[1]
         table.render({
             elem: '#currentTableId',
-            url: '../api/table.json',
+            url: 'http://localhost:5000/user/queryAll',
+            where:{"token":token},
             cols: [[
                 {type: "checkbox", width: 50, fixed: "left"},
-                {field: 'id', width: 80, title: 'ID', sort: true},
-                {field: 'username', width: 80, title: '用户名'},
-                {field: 'sex', width: 80, title: '性别', sort: true},
-                {field: 'city', width: 80, title: '城市'},
-                {field: 'sign', title: '签名', minWidth: 150},
-                {field: 'experience', width: 80, title: '积分', sort: true},
-                {field: 'score', width: 80, title: '评分', sort: true},
-                {field: 'classify', width: 80, title: '职业'},
-                {field: 'wealth', width: 135, title: '财富', sort: true},
-                {title: '操作', minWidth: 50, templet: '#currentTableBar', fixed: "right", align: "center"}
+                {field: 'user_id', width: 200, title: 'ID', sort: true},
+                {field: 'username', width: 150, title: '用户名'},
+                {field: 'passwd', width: 150, title: '密码'},
+                {field: 'mobile', width: 150, title: '手机'},
+                {field: 'create_date', title: '创建日期', minWidth: 120},
+                {field: 'expire_date', title: '失效日期', minWidth: 120},
+                {field: 'state', width: 80, title: '状态'}
             ]],
             limits: [10, 15, 20, 25, 50, 100],
             limit: 15,

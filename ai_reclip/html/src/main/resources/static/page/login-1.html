@@ -84,15 +84,24 @@
         form.on('submit(login)', function (data) {
             data = data.field;
             if (data.username == '') {
-                layer.msg('用户名不能为空');
+                layer.msg('用户名不能为空',{
+                    icon: 2,
+                    time: 1000 //2秒关闭（如果不配置，默认是3秒）
+                });
                 return false;
             }
             if (data.password == '') {
-                layer.msg('密码不能为空');
+                layer.msg('密码不能为空',{
+                    icon: 2,
+                    time: 1000 //2秒关闭（如果不配置，默认是3秒）
+                });
                 return false;
             }
             if (data.captcha == '') {
-                layer.msg('验证码不能为空');
+                layer.msg('验证码不能为空',{
+                    icon: 2,
+                    time: 1000 //2秒关闭（如果不配置，默认是3秒）
+                });
                 return false;
             }
 
@@ -100,16 +109,26 @@
                 url:"http://localhost:5000/user/checkLogin",
                 data: {"username":data.username, "passwd":data.password},
                 type:"Post",
-                dataType:"json",
-                success:function(data){
-                    console.log(data);
-                    layer.msg(data.msg);
-                    /*layer.msg('登录成功', function () {
-                        window.location = '/index.html';
-                    });*/
+                dataType:"jsonp",
+                jsonp:"callback",
+                jsonpCallback:"success_jsonp",
+                success:function(res){
+                    if(res.code == "-1"){
+                        layer.msg("登录失败，请重试",{
+                            icon: 2,
+                            time: 1000 //2秒关闭（如果不配置，默认是3秒）
+                        })
+                    }
+                    layer.msg("登录成功，正在跳转",{
+                        icon: 1,
+                        time: 1000 //2秒关闭（如果不配置，默认是3秒）
+                    },function () {
+                        var url = "http://localhost:1234/index.html?username="+res.data.username+"&passwd="+res.data.passwd+"&token="+res.data.token;
+                        window.location = url;
+                    })
                 },
-                error:function(data){
-                    $.messager.alert('错误',data.msg);
+                error:function(res){
+                    layer.msg("登录失败，请重试")
                 }
             });
 
