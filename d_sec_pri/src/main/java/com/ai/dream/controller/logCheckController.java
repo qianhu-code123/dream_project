@@ -47,8 +47,8 @@ public class logCheckController {
                 String token = KeyUtils.genUniqueKey();
                 String redis_key = "TOKEN_" + user_id;
                 // NX是不存在时才set， XX是存在时才set， EX是秒，PX是毫秒
-                jedisCluster.set(redis_key,token,"NX","EX",86400L);
-                session.setAttribute("user",teMap);
+                //jedisCluster.set(redis_key,token,"NX","EX",86400L);
+                jedisCluster.set(redis_key,token);
                 teMap.put("token",token);
                 finalMap.put("code",0);
                 finalMap.put("msg","success");

@@ -123,7 +123,9 @@
                         icon: 1,
                         time: 1000 //2秒关闭（如果不配置，默认是3秒）
                     },function () {
-                        var url = "http://localhost:1234/index.html?username="+res.data.username+"&passwd="+res.data.passwd+"&token="+res.data.token;
+                        localStorage.setItem("user_id",res.data.user_id);
+                        localStorage.setItem("token",res.data.token);
+                        var url = "http://localhost:1234/index.html?username="+res.data.username+"&passwd="+res.data.passwd+"&token="+res.data.token+"&user_id="+res.data.user_id;
                         window.location = url;
                     })
                 },

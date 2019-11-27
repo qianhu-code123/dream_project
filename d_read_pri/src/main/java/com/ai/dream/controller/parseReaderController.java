@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,7 +31,7 @@ public class parseReaderController {
     private INetReaderSV isv;
 
     @RequestMapping("/read/parse/query")
-    public Map<String,Object> parseRead(HttpServletRequest request) throws Exception{
+    public Map<String,Object> parseRead(HttpServletRequest request, HttpServletResponse response) throws Exception{
         log.info("请求参数："+request.getParameter("params"));
         String prefix = "http://www.dingdiann.com/searchbook.php?";
         String url = "";
@@ -38,27 +39,22 @@ public class parseReaderController {
         String jsonStr = "";
         Document doc;
         try{
-            if(!EmptyUtil.isEmpty(request.getParameter("params"))){
-                jsonStr = request.getParameter("params");
-                relMap = JsonTools.json2Map(jsonStr);
-                if(!EmptyUtil.isEmpty(relMap.get("keyword"))){
-                    url = prefix + "keyword="+relMap.get("keyword");
-                    doc = Jsoup.connect(url).get();
-                    Element elt = doc.getElementById("main");
-                    Elements elts = elt.select("ul>li");
-                    relMap.put("data",elts.toString());
-                    /*jsonStr = JsonTools.object2Json(relMap);*/
+                String keyword = request.getParameter("keyword");
 
-                    return relMap;
-                }
-
-            }
+                url = prefix + "keyword="+keyword;
+                //获取dom对象
+                doc = Jsoup.connect(url).get();
+                //main 元素
+                Element elt = doc.getElementById("main");
+                //li元素   列表
+                Elements elts = elt.select("ul");
+                //转字符串
+                relMap.put("data",elts.toString());
+                return relMap;
         }catch (Exception e){
             log.error("解析错误,错误原因: "+e);
             throw  e;
         }
-
-        return null;
     }
 
 

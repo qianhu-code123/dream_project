@@ -9,18 +9,24 @@
         select * from sec_user where username = #{username} and state = 'U'
     </select>
     <select id="queryAllUser"  resultType="java.util.Map">
-        select * from sec_user where state = 'U'
+        select * from sec_user where state = 'U' and  username like concat('%',#{username},'%') and mobile like concat('%',#{mobile},'%')
     </select>
 
     <insert id="saveUser" parameterType="java.util.Map">
         INSERT INTO sec_user(user_id, username, passwd, mobile, create_date,expire_date,state) VALUES(#{user_id}, #{username}, #{passwd}, #{mobile}, #{create_date},#{expire_date}, #{state})
     </insert>
 
-    <update id="deleteUser" parameterType="java.util.Map">
-        update sec_user set state = 'E' where mobile = #{mobile}
+    <update id="deleteUser" parameterType="java.util.List">
+        update sec_user set state = 'E' where mobile in
+        <foreach collection="list" item="mobile" open="(" separator="," close=")">
+            #{mobile}
+        </foreach>
+
     </update>
 
-
+    <update id="updateUser" parameterType="java.util.List">
+        update sec_user set passwd = #{passwd}, mobile = #{mobile} where user_id = #{user_id}
+    </update>
 
 
 

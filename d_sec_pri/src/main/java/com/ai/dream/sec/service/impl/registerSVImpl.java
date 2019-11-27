@@ -20,8 +20,8 @@ public class registerSVImpl implements IRegisterSV {
     }
 
     @Override
-    public List<Map<String, Object>> queryAllUser() {
-        return sv.queryAllUser();
+    public List<Map<String, Object>> queryAllUser(Map<String,Object> paraMap) {
+        return sv.queryAllUser(paraMap);
     }
 
     @Override
@@ -35,7 +35,12 @@ public class registerSVImpl implements IRegisterSV {
     }
 
     @Override
-    public boolean deleteUser(Map<String, Object> paraMap) {
+    public boolean deleteUser(List paraMap) {
         return sv.deleteUser(paraMap);
+    }
+
+    @Override
+    public boolean updateUser(Map<String, Object> paraMap) {
+        return sv.updateUser(paraMap);
     }
 }

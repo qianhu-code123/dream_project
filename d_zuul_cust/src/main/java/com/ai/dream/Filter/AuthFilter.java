@@ -89,7 +89,7 @@ public class AuthFilter extends ZuulFilter {
 
     private void readTokenFromHeader(RequestContext requestContext, HttpServletRequest request) throws Exception{
 
-        String headerToken = request.getHeader("token");
+        String headerToken = request.getParameter("token");
         if (StringUtils.isEmpty(headerToken)) {
             setUnauthorizedResponse(requestContext, INVALID_TOKEN);
         } else {
@@ -103,7 +103,7 @@ public class AuthFilter extends ZuulFilter {
         String userIdCookie = CookieUtils.getCookieValue(request, "userId");
         if (userIdCookie == null || StringUtils.isEmpty(userIdCookie)) {
 
-            String userId = request.getHeader("userId");
+            String userId = request.getParameter("user_id");
             if (StringUtils.isEmpty(userId)) {
                 setUnauthorizedResponse(requestContext, INVALID_USERID);
             } else {
