@@ -54,33 +54,20 @@ public class parseReaderController {
 
 
     @RequestMapping("/read/ddk*")
-    public Map<String,Object> parseCatlog(HttpServletRequest request) throws Exception{
+    public String parseCatlog(HttpServletRequest request, HttpServletResponse response) throws Exception{
         Map<String,Object> relMap = new HashMap<>();
-        String dir = request.getServletPath();
-        String prefix = "http://www.dingdiann.com";
-        String url = "";
-        Document doc ;
-        StringBuffer stringBuffer = new StringBuffer("");
+        String jsonStr = "";
         try {
-            url = prefix + dir;
-            doc = Jsoup.connect(url).get();
-            //简介部分
-            Elements jj = doc.getElementsByClass("maininfo");
-            log.info("简介："+jj.toString());
-            relMap.put("jj",jj.toString());
-            Elements content = doc.getElementsByClass("box_con").select("div>dl").select("dd");
-            for(int i=1;i<content.size();i++){
-                stringBuffer = stringBuffer.append(content.get(i));
-            }
-            log.info("内容："+stringBuffer.toString());
-            relMap.put("catlog",stringBuffer.toString());
-
-            return relMap;
-
+            String catalog = request.getParameter("catalog");
+            parseQuery pq = new parseQuery();
+            List<Map<String,Object>> list = pq.getCatalog(catalog);
+            response.setHeader("Access-Control-Allow-Origin","*");
+            jsonStr = JsonInit.rebakJson("0000","",list, list.size());
         }catch (Exception e){
             log.error("失败原因: ",e);
             throw e;
         }
+        return jsonStr;
     }
 
     @RequestMapping("/read/ddk*/**.html")
