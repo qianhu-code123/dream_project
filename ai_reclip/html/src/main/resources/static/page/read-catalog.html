@@ -15,15 +15,54 @@
     <link rel="stylesheet" href="../css/layuimini.css" media="all">
     <link rel="stylesheet" href="../lib/font-awesome-4.7.0/css/font-awesome.min.css" media="all">
 </head>
+<style>
+    .aubook {
+        height: 900px;
+    }
+</style>
 <body class="layui-layout-body layuimini-all">
-<div class="layui-layout layui-layout-admin">
-
-
-</div>
+    <div class="layui-layout layui-layout-admin aubook" >
+        <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
+    </div>
 <script src="../lib/jquery-3.4.1/jquery-3.4.1.min.js" charset="utf-8"></script>
 <script src="../lib/layui-v2.5.4/layui.js" charset="utf-8"></script>
 <script>
+    layui.use(['table'],function () {
+        var $ = layui.jquery,
+            table = layui.table;
+        //获取当前url
+        console.log(window.location.href)
+        var params = window.location.href.split("?")[1]
+        var token = localStorage.getItem("token");
+        var userId = localStorage.getItem("user_id");
+        var catalog = params.split("&")[0].split("=")[1];
+        var url = 'http://localhost:5000/read/'+catalog;
+        table.render({
+            elem: '#currentTableId',
+            //url: url,
+            where:{"token":token,"user_id":userId},
+            cols: [[
+                {field: 'catlog-1', width: 300, title: ''},
+                {field: 'catlog-2', width: 300, title: ''},
+                {field: 'catlog-3', width: 300, title: ''},
+                {field: 'catlog-4', width: 300, title: ''},
+            ]],
+            data:[
+                {
+                    "catlog-1":"<a style=\"\" href=\"/ddk739/2573923.html\">第一章 北灵院</a>",
+                    "catlog-2":"<a style=\"\" href=\"/ddk739/2573924.html\">第二章 被踢出灵路的少年</a>",
+                    "catlog-3":"<a style=\"\" href=\"/ddk739/2573925.html\">第三章 牧域</a>",
+                    "catlog-4":"<a style=\"\" href=\"/ddk739/2573926.html\">第四章 大浮屠诀</a>"
+                }
+            ],
+            limits: [10, 15, 20, 25, 50, 100],
+            limit: 15,
+            id:"testReload",
+            page: true
+        });
 
+
+    })
 
 </script>
 

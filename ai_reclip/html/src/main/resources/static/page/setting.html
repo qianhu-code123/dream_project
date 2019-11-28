@@ -44,6 +44,7 @@
         <fieldset class="layui-elem-field aubook">
             <legend id="showtitle" hidden><span style="color: #1aa094">请双击选中列查看</span></legend>
             <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
+            <div id="laypage"></div>
         </fieldset>
 
 
@@ -56,7 +57,8 @@
     layui.use(['table','form'], function () {
         var form = layui.form
             , layer = layui.layer
-            , table = layui.table;
+            , table = layui.table
+            , laypage = layui.laypage;
         var token = localStorage.getItem("token");
         var userId = localStorage.getItem("user_id");
 
@@ -65,16 +67,8 @@
             $("#showtitle").show();
             table.render({
                 elem: '#currentTableId',
-                //url: 'http://localhost:5000/read/parse/query',
+                url: 'http://localhost:5000/read/parse/query',
                 where:{"keyword":data.field.keyword,"token":token,"user_id":userId},
-                parseData: function(res){ //res 即为原始返回的数据
-                    return {
-                        "code": res.code, //解析接口状态
-                        "msg": res.msg, //解析提示文本
-                        "count": res.count, //解析数据长度
-                        "data": res.data //解析数据列表
-                    };
-                },
                 //书籍类型 作品名称 最新章节 作者 点击 更新时间 状态
                 cols: [[
                     {field: 'bookType', width: 100, title: '书籍类型'},
@@ -85,29 +79,17 @@
                     {field: 'upDate', title: '更新时间', width: 170},
                     {field: 'state', width: 80, title: '状态'}
                 ]],
-                data:[
-                    {
-                        "bookType": "[玄幻奇幻]",
-                        "bookName": "<a href=\"/ddk739/\" target=\"_blank\">大主宰</a>",
-                        "newTitle":`<a href="/ddk739/2417559.html" target="_blank">第一千五百五十一章 邪神陨落</a>`,
-                        "author":"天蚕土豆",
-                        "clickTime":"0",
-                        "upDate":"2019-11-21 00:00:00",
-                        "state":"连载",
-                    }
-                ],
-                limits: [10, 15, 20, 25, 50, 100],
-                limit: 15,
                 id:"testReload",
                 page: true
             });
-
             //监听行双击事件
             table.on('rowDouble(currentTableFilter)', function(obj){
                 var data = obj.data;
+                console.log(data.bookName.split("/")[1]);
+                var catalog = data.bookName.split("/")[1]
                 var preUrl = parent.location.href.split("#")[0].split("?")[0].replace("index.html","page/read-catalog.html?");
                 var params = parent.location.href.split("#")[0].split("?")[1];
-                window.open(preUrl+params,"_blank");
+                window.open(preUrl+"catalog=" + catalog + "&"+ params,"_blank");
             });
 
 
