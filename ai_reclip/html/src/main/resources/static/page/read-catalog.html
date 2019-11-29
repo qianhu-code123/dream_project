@@ -22,23 +22,14 @@
     <div class="layui-layout layui-layout-admin aubook" >
         <div class="layui-row layui-col-space10">
             <div class="layui-col-md1">
-
             </div>
             <div class="layui-col-md10">
                 <h1 style="text-align: center"><span id="title"></span></h1>
             </div>
             <div class="layui-col-md1">
-
             </div>
         </div>
-
-
         <table class="layui-hide" id="currentTableId"  lay-filter="currentTableFilter"></table>
-
-
-
-
-
     </div>
 <script src="../lib/jquery-3.4.1/jquery-3.4.1.min.js" charset="utf-8"></script>
 <script src="../lib/layui-v2.5.4/layui.js" charset="utf-8"></script>
@@ -48,7 +39,6 @@
             table = layui.table;
         //获取当前url
         console.log(window.location.href);
-        var params = window.location.href.split("?")[1]
         var token = localStorage.getItem("token");
         var userId = localStorage.getItem("user_id");
         var bookname = localStorage.getItem("bookname");
@@ -62,20 +52,50 @@
             height: 'full-100',
             where:{"token":token,"user_id":userId,"catalog":catalog},
             cols: [[
-                {field: 'catlog-1',  title: ''},
-                {field: 'catlog-2',  title: ''},
-                {field: 'catlog-3',  title: ''},
-                {field: 'catlog-4',  title: ''},
-                {field: 'catlog-5',  title: ''},
-                {field: 'catlog-6',  title: ''},
+                {field: 'catlog1',  title: '',event: 'catevent1', style:'cursor: pointer;'},
+                {field: 'catlog2',  title: '',event: 'catevent2', style:'cursor: pointer;'},
+                {field: 'catlog3',  title: '',event: 'catevent3', style:'cursor: pointer;'},
+                {field: 'catlog4',  title: '',event: 'catevent4', style:'cursor: pointer;'},
+                {field: 'catlog5',  title: '',event: 'catevent5', style:'cursor: pointer;'},
+                {field: 'catlog6',  title: '',event: 'catevent6', style:'cursor: pointer;'},
             ]],
             id:"testReload",
             limit:2000,
             page: true
         });
+        table.on('tool(currentTableFilter)', function(obj){
+            var data = obj.data;
+            if(obj.event === 'catevent1'){
+                eventTools(data.catlog1)
+            }
+            if(obj.event === 'catevent2'){
+                eventTools(data.catlog2)
+            }
+            if(obj.event === 'catevent3'){
+                eventTools(data.catlog3)
+            }
+            if(obj.event === 'catevent4'){
+                eventTools(data.catlog4)
+            }
+            if(obj.event === 'catevent5'){
+                eventTools(data.catlog5)
+            }
+            if(obj.event === 'catevent6'){
+                eventTools(data.catlog6)
+            }
+        } )
+    });
 
-
-    })
+    function eventTools(event) {
+        //servlet路径
+        localStorage.setItem("path",event.split("\"")[3]);
+        //content tiltle
+        localStorage.setItem("content",event.split("\"")[4].split("<")[0].replace(">",""));
+        var preUrl = window.location.href.split("?")[0].replace("read-catalog.html","read-content.html");
+        var param = "?"+window.location.href.split("?")[1];
+        var url = preUrl + param;
+        window.open(url,"_blank")
+    }
 
 </script>
 

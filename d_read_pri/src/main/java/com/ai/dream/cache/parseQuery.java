@@ -1,6 +1,6 @@
 package com.ai.dream.cache;
 
-import com.netflix.discovery.converters.jackson.EurekaXmlJacksonCodec;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -76,14 +76,17 @@ public class parseQuery {
             Map<String,Object> finalMap = new HashMap<>();
             while(it.hasNext()){
                 Element el = (Element) it.next();
+                //将超链接去掉，属性值放到class中
+                el.addClass(el.attr("href"));
+                el.removeAttr("href");
                 if(content.size()==i){
                     if(g%7==0){
                         list.add(finalMap);
                         finalMap = new HashMap<>();
                         g = 1;
-                        finalMap.put("catlog-"+g,el.toString());
+                        finalMap.put("catlog"+g,el.toString());
                     }else{
-                        finalMap.put("catlog-"+g,el.toString());
+                        finalMap.put("catlog"+g,el.toString());
                     }
                     list.add(finalMap);
                 }else{
@@ -91,9 +94,9 @@ public class parseQuery {
                         list.add(finalMap);
                         finalMap = new HashMap<>();
                         g = 1;
-                        finalMap.put("catlog-"+g,el.toString());
+                        finalMap.put("catlog"+g,el.toString());
                     }else {
-                        finalMap.put("catlog-"+g,el.toString());
+                        finalMap.put("catlog"+g,el.toString());
                     }
                 }
                 g++;
@@ -106,9 +109,36 @@ public class parseQuery {
         return list;
     }
 
+    @Cacheable(cacheNames = "getContent",key = "#path + ''", unless = "#result == null")
+    public  List<String> getContent(String path) throws Exception{
+        String prefix = "http://www.dingdiann.com";
+        List<String> newe = new ArrayList<>();
+        String url = "";
+        Document doc ;
+        try {
+            url = prefix + path;
+            doc = Jsoup.connect(url).get();
+            Element jj = doc.getElementById("content");
+            Elements tl = doc.getElementsByClass("bookName").select("h1");
+            String name = tl.get(0).toString();
+            String str = jj.toString();
+            String[] s =str.split("\n");
+            List<String> list=new ArrayList<>();
+            Collections.addAll(list,s);
+            list.remove(0);
+            list.remove(list.size()-1);
+            list.remove(list.size()-1);
+            Iterator it = list.iterator();
+            while(it.hasNext()){
+                newe.add((String) it.next());
+            }
+            newe.add(name);
+        }catch (Exception e){
+            throw e;
+        }
 
-
-
+        return newe;
+    }
 
 
 }

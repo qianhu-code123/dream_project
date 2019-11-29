@@ -71,28 +71,20 @@ public class parseReaderController {
     }
 
     @RequestMapping("/read/ddk*/**.html")
-    public Map<String, Object> parseBook(HttpServletRequest request) throws Exception{
-
-        log.info("请求path： "+request.getServletPath());
+    public String parseBook(HttpServletRequest request,HttpServletResponse response) throws Exception{
         Map<String,Object> relMap = new HashMap<>();
-        String dir = request.getServletPath();
-        String prefix = "http://www.dingdiann.com";
-        String url = "";
-        Document doc ;
-        StringBuffer stringBuffer = new StringBuffer("");
+        String dir = request.getParameter("path");
+        String jsonStr = "";
         try {
-            url = prefix + dir;
-            doc = Jsoup.connect(url).get();
-            //简介部分
-            Element jj = doc.getElementById("content");
-            log.info("内容："+jj.toString());
-            relMap.put("content",jj.toString());
-            return relMap;
-
+            parseQuery pq = new parseQuery();
+            List<String> list = pq.getContent(dir);
+            response.setHeader("Access-Control-Allow-Origin","*");
+            jsonStr = JsonInit.rebakJson("0000","",list, 1);
         }catch (Exception e){
             log.error("失败原因: ",e);
             throw e;
         }
+        return jsonStr;
     }
 
 

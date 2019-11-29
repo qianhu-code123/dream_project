@@ -32,6 +32,8 @@ public class junitParseCatlog {
         Map<String,Object> finalMap = new HashMap<>();
         while(it.hasNext()){
             Element el = (Element) it.next();
+            el.addClass(el.attr("href"));
+            el.removeAttr("href");
             if(content.size()==i){
                 if(g%7==0){
                     list.add(finalMap);
