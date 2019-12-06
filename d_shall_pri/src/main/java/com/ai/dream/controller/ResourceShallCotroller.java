@@ -2,6 +2,7 @@ package com.ai.dream.controller;
 
 import com.ai.dream.shall.service.interfaces.IResourceShallSV;
 import com.ai.dream.utils.EmptyUtil;
+import com.ai.dream.utils.JsonInit;
 import com.ai.dream.utils.JsonTools;
 import org.omg.CORBA.OBJ_ADAPTER;
 import org.slf4j.Logger;
@@ -11,11 +12,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 public class ResourceShallCotroller {
@@ -32,42 +31,37 @@ public class ResourceShallCotroller {
      * @throws Exception
      */
     @RequestMapping("/shall/res/save")
-    public String save(HttpServletRequest request) throws  Exception{
-        log.info("请求参数："+request.getParameter("params"));
+    public String save(HttpServletRequest request, HttpServletResponse response) throws  Exception{
         Map<String ,Object> relMap = new HashMap<>();
-        Map<String,Object> finalMap = new HashMap<>();
         String jsonStr = "";
-        boolean flag = false;
+        boolean flag;
         try {
-            if(!EmptyUtil.isEmpty(request.getParameter("params"))) {
-                jsonStr = request.getParameter("params");
-                relMap = JsonTools.json2Map(jsonStr);
-                if (EmptyUtil.isEmpty(relMap.get("res_name"))) {
-                    throw new Exception("资源名称为空!");
-                }
-                if (EmptyUtil.isEmpty(relMap.get("res_url"))) {
-                    throw new Exception("资源链接为空!");
-                }
-                if (EmptyUtil.isEmpty(relMap.get("res_check"))) {
-                    throw new Exception("资源提取码名称为空!");
-                }
-                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:ss:mm");
-                java.util.Date create_date = format.parse(relMap.get("create_date").toString());
-                java.util.Date expire_date = format.parse(relMap.get("expire_date").toString());
-                relMap.put("create_date",create_date);
-                relMap.put("expire_date",expire_date);
-                relMap.put("state","U");
-                flag = isv.saveResource(relMap);
-                finalMap.put("code",flag?"0000":"-1");
-                finalMap.put("msg",flag?"success":"fail");
-                finalMap.put("data","");
-                finalMap.put("count",flag?1:0);
+            if (EmptyUtil.isEmpty(request.getParameter("res_name"))) {
+                throw new Exception("资源名称为空!");
             }
+            if (EmptyUtil.isEmpty(request.getParameter("res_url"))) {
+                throw new Exception("资源链接为空!");
+            }
+            if (EmptyUtil.isEmpty(request.getParameter("res_check"))) {
+                throw new Exception("资源提取码名称为空!");
+            }
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:ss:mm");
+            String start_date = format.format(new Date());
+            relMap.put("res_id",request.getParameter("res_id"));
+            relMap.put("res_name",request.getParameter("res_name"));
+            relMap.put("res_url",request.getParameter("res_url"));
+            relMap.put("res_check",request.getParameter("res_check"));
+            relMap.put("create_date",start_date);
+            relMap.put("expire_date","2099-12-31 23:59:59");
+            relMap.put("state","U");
+            flag = isv.saveResource(relMap);
+            jsonStr = JsonInit.rebakJson(flag?"0000":"-1",flag?"success":"fail","",1);
+            response.setHeader("Access-Control-Allow-Origin","*");
         }catch (Exception e){
             log.error("失败原因： ",e);
             throw e;
         }
-        return JsonTools.object2Json(finalMap);
+        return jsonStr;
     }
 
     /**
@@ -77,26 +71,40 @@ public class ResourceShallCotroller {
      * @throws Exception
      */
     @RequestMapping("/shall/res/queryAllResource")
-    public String queryAllRes(HttpServletRequest request) throws Exception{
-        log.info("请求参数："+request.getParameter("params"));
-        Map<String,Object> finalMap = new HashMap<>();
-        boolean flag = false;
+    public String queryAllRes(HttpServletRequest request, HttpServletResponse response) throws Exception{
+        List<Map<String,Object>> relist = new ArrayList<>();
+        String jsonStr = "";
         try {
-            List<Map<String,Object>> list = isv.queryAllResource();
-            if(null == list || 0 == list.size()){
-                flag = false;
-            }else{
-                flag =true;
+            String page = request.getParameter("page");
+            String limit = request.getParameter("limit");
+            String res_id = request.getParameter("res_id")== null ? "":request.getParameter("res_id");
+            String res_name = request.getParameter("res_name")== null ? "":request.getParameter("res_name");
+            Map<String,Object> temMap = new HashMap<>();
+            temMap.put("res_id",res_id);
+            temMap.put("res_name",res_name);
+            long start = Long.parseLong(page) * Long.parseLong(limit) - Long.parseLong(limit);
+            long count = Long.parseLong(limit);
+            temMap.put("start",start);
+            temMap.put("count",count);
+            //page=1 limit 10 limit limit*page-limit,limit*page  0 10
+            //page=2 limit 10 limit limit*page-limit,limit*page  10 20
+            //page=3 limit 10 limit limit*page-limit ,limit*page 20 30
+            List<Map<String,Object>> list = isv.queryAllResource(temMap);
+            Iterator it = list.iterator();
+            while(it.hasNext()){
+                Map<String,Object> temp = (Map<String, Object>) it.next();
+                temp.put("state","U".equals(temp.get("state"))?"有效":"无效");
+                temp.put("expire_date","2099-12-31 23:59:59");
+                temp.put("res_check","<span onclick='getTicket("+temp.get("res_id")+")' style='color:green'>点击查询<span>");
+                relist.add(temp);
             }
-            finalMap.put("code",flag?"0000":"-1");
-            finalMap.put("msg",flag?"success":"fail");
-            finalMap.put("data",list);
-            finalMap.put("count",flag?list.size():0);
+            jsonStr = JsonInit.rebakJson("0000","查询成功",relist,relist.size());
+            response.setHeader("Access-Control-Allow-Origin","*");
         }catch (Exception e){
             log.error("失败原因：",e);
             throw e;
         }
-        return JsonTools.object2Json(finalMap);
+        return jsonStr;
     }
 
     /**
@@ -106,61 +114,81 @@ public class ResourceShallCotroller {
      * @throws Exception
      */
     @RequestMapping("/shall/res/queryResource")
-    public String queryResource(HttpServletRequest request) throws Exception{
-        log.info("请求参数："+request.getParameter("params"));
+    public String queryResource(HttpServletRequest request,HttpServletResponse response) throws Exception{
         Map<String,Object> finalMap = new HashMap<>();
         Map<String ,Object> relMap = new HashMap<>();
         String jsonStr = "";
-        boolean flag = false;
-
+        boolean flag;
         try {
-            if(!EmptyUtil.isEmpty(request.getParameter("params"))) {
-                jsonStr = request.getParameter("params");
-                relMap = JsonTools.json2Map(jsonStr);
-                String userId = request.getHeader("userId");
-                relMap.put("user_id",userId);
-                if (EmptyUtil.isEmpty(userId)) {
-                    throw new Exception("无userId信息");
-                }
+            String res_id = request.getParameter("res_id");
+            String userId = request.getParameter("user_id");
+            relMap.put("res_id",res_id);
+            relMap.put("user_id",userId);
+            if (EmptyUtil.isEmpty(userId)) {
+                throw new Exception("无userId信息");
             }
-            Map<String,Object> teMap = new HashMap<>();
-            teMap.put("user_id",request.getHeader("userId"));
-            Map<String,Object> resUserMap = isv.queryResUser(teMap);
-            if(null == resUserMap || relMap.size() == 0){
+            Map<String,Object> resUserMap = isv.queryResUser(relMap);
+            if(null == resUserMap || resUserMap.size() == 0){
                 //首次给10次机会
-                teMap.put("shall_times",9L);
-                teMap.put("state","U");
-                flag = isv.saveResUser(teMap);
-                log.info("用户 user_id = " + request.getHeader("userId") + "初次驾到，加10次查看机会");
+                relMap.put("shall_times",9L);
+                relMap.put("state","U");
+                flag = isv.saveResUser(relMap);
+                log.info("用户 user_id = " + request.getHeader("user_id") + "初次驾到，加10次查看机会");
                 if(!flag){
                     log.error("资源申请失败，请重试");
                     throw new Exception("资源申请失败，请重试");
                 }
                 Map<String, Object> resMap = isv.queryResource(relMap);
-                relMap.put("res_check",resMap.get("RES_CHECK"));
+                relMap.put("res_check",resMap.get("res_check"));
                 relMap.put("times",9L);
             }else {
-                long times = (long) resUserMap.get("SHALL_TIME");
+                int times = (int) resUserMap.get("shall_times");
                 if(times == 0){
                     log.error("用户查看权限已用尽，请联系管理员");
-                    throw new Exception("用户查看权限已用尽，请联系管理员");
+                    jsonStr = JsonInit.rebakJson("1000","fail","",0);
+                    response.setHeader("Access-Control-Allow-Origin","*");
+                    return jsonStr;
                 }else{
                     Map<String, Object> resMap = isv.queryResource(relMap);
-                    relMap.put("res_check",resMap.get("RES_CHECK"));
+                    relMap.put("res_check",resMap.get("res_check"));
                     times--;
                     relMap.put("times",times);
+                    relMap.put("state","U");
                     isv.updateResUser(relMap);
                 }
             }
-            finalMap.put("code","0000");
-            finalMap.put("msg","success");
-            finalMap.put("data",relMap);
-            finalMap.put("count",1);
+            jsonStr = JsonInit.rebakJson("0000","success",relMap,1);
+            response.setHeader("Access-Control-Allow-Origin","*");
         }catch (Exception e){
             log.error("失败原因：",e);
             throw e;
         }
-        return JsonTools.object2Json(finalMap);
+        return jsonStr;
+    }
+
+    /**
+     * 查询用户拥有的次数
+     * @param request
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("/shall/res/queryResUser")
+    public String queryResUser(HttpServletRequest request,HttpServletResponse response) throws Exception{
+        Map<String ,Object> relMap = new HashMap<>();
+        String jsonStr = "";
+        boolean flag;
+        try {
+            String userId = request.getParameter("userId");
+            relMap.put("user_id",userId);
+            Map<String,Object> resUserMap = isv.queryResUser(relMap);
+            relMap.put("times",resUserMap.get("shall_times"));
+            jsonStr = JsonInit.rebakJson("0000","查询用户拥有的次数",relMap,1);
+            response.setHeader("Access-Control-Allow-Origin","*");
+        }catch (Exception e){
+            log.error("失败原因：",e);
+            throw e;
+        }
+        return jsonStr;
     }
 
     /**
@@ -170,65 +198,24 @@ public class ResourceShallCotroller {
      * @throws Exception
      */
     @RequestMapping("/shall/res/updateUT")
-    public String updateUT(HttpServletRequest request) throws Exception {
-        log.info("请求参数：" + request.getParameter("params"));
+    public String updateUT(HttpServletRequest request,HttpServletResponse response) throws Exception {
         Map<String, Object> finalMap = new HashMap<>();
         Map<String, Object> relMap = new HashMap<>();
         String jsonStr = "";
-        boolean flag = false;
-        long times = 0L;
         try{
-            if(!EmptyUtil.isEmpty(request.getParameter("params"))) {
-                jsonStr = request.getParameter("params");
-                relMap = JsonTools.json2Map(jsonStr);
-                String userId = request.getHeader("userId");
-                relMap.put("user_id",userId);
-                if (EmptyUtil.isEmpty(userId)) {
-                    throw new Exception("无userId信息");
-                }
-                //level : A 表示普通 20次   B 表示中等 50次   C 表示上等 250  D 表示无限制 99999
-                if (EmptyUtil.isEmpty(relMap.get("level"))) {
-                    throw new Exception("修改用户次数，需提供登记");
-                }
-            }
-            Map<String,Object> tMap = isv.queryResUser(relMap);
-            if(null == tMap || 0 == tMap.size()){
-                if("A".equals(relMap.get("level"))){
-                    times = 20L;
-                }else if("B".equals(relMap.get("level"))){
-                    times = 50L;
-                }else if("C".equals(relMap.get("level"))){
-                    times = 250L;
-                }else if("D".equals(relMap.get("level"))){
-                    times = 99999L;
-                }
-                relMap.put("shall_times",times);
-                relMap.put("state",'U');
-                isv.saveResUser(relMap);
-            }else{
-                Map<String,Object> temp = isv.queryResUser(relMap);
-                long _times_ = (long) temp.get("SHALL_TIMES");
-                if("A".equals(relMap.get("level"))){
-                    times = _times_ + 20L;
-                }else if("B".equals(relMap.get("level"))){
-                    times = _times_ + 50L;
-                }else if("C".equals(relMap.get("level"))){
-                    times = _times_ + 250L;
-                }else if("D".equals(relMap.get("level"))){
-                    times = 99999L;
-                }
-                relMap.put("shall_times",times);
-                isv.updateResUser(relMap);
-            }
-            finalMap.put("code","0000");
-            finalMap.put("msg","success");
-            finalMap.put("data",relMap);
-            finalMap.put("count",1);
+            String userId = request.getParameter("user_id");
+            long times = Long.parseLong(request.getParameter("times"));
+            relMap.put("user_id",userId);
+            relMap.put("times",times);
+            relMap.put("state","U");
+            isv.updateResUser(relMap);
+            jsonStr = JsonInit.rebakJson("0000","success",relMap,1);
+            response.setHeader("Access-Control-Allow-Origin","*");
         }catch (Exception e){
             log.error("失败原因： ",e);
             throw e;
         }
-        return JsonTools.object2Json(finalMap);
+        return jsonStr;
     }
 
     /**
@@ -238,28 +225,26 @@ public class ResourceShallCotroller {
      * @throws Exception
      */
     @RequestMapping("/shall/res/updateRes")
-    public String updateRes(HttpServletRequest request) throws Exception {
-        log.info("请求参数：" + request.getParameter("params"));
+    public String updateRes(HttpServletRequest request, HttpServletResponse response) throws Exception {
         Map<String, Object> finalMap = new HashMap<>();
         Map<String, Object> relMap = new HashMap<>();
         String jsonStr = "";
-        boolean flag = false;
-        long times = 0L;
         try{
-            jsonStr = request.getParameter("params");
-            relMap = JsonTools.json2Map(jsonStr);
-            String userId = request.getHeader("userId");
-            relMap.put("user_id",userId);
-            flag = isv.updateResource(relMap);
-            finalMap.put("code",flag?"0000":"-1");
-            finalMap.put("msg",flag?"success":"fail");
-            finalMap.put("data","");
-            finalMap.put("count",1);
+            String res_id = request.getParameter("res_id");
+            String res_check = request.getParameter("res_check");
+            String state = request.getParameter("state");
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:ss:mm");
+            String start_date = format.format(new Date());
+            relMap.put("res_id",start_date);
+            relMap.put("state",state);
+            isv.updateResource(relMap);
+            jsonStr = JsonInit.rebakJson("0000","success",relMap,1);
+            response.setHeader("Access-Control-Allow-Origin","*");
         }catch (Exception e){
             log.error("失败原因： ",e);
             throw e;
         }
-        return JsonTools.object2Json(finalMap);
+        return jsonStr;
     }
 
 }

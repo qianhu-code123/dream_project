@@ -7,7 +7,7 @@
     </select>
 
     <select id="queryAllResource"  resultType="java.util.Map">
-        select * from resource_shall where  state = 'U'
+        select * from resource_shall where  res_id like concat('%',#{res_id},'%')  and res_name like concat('%',#{res_name},'%')  and  state = 'U' limit #{start},#{count}
     </select>
 
     <select id="queryResUser" parameterType="java.util.Map" resultType="java.util.Map">
@@ -23,11 +23,11 @@
     </insert>
 
     <update id="updateResource" parameterType="java.util.Map">
-        update updateResource set res_check = #{res_check} , create_date = #{create_date}, expire_date = #{expire_date}, state = #{state} where res_id = #{res_id}
+        update updateResource set res_check = #{res_check} , create_date = #{create_date},state = #{state} where res_id = #{res_id}
     </update>
 
     <update id="updateResUser" parameterType="java.util.Map">
-        update resource_user set shall_times = #{shall_times}, state = #{state} where user_id = #{user_id}
+        update resource_user set shall_times = #{times}, state = #{state} where user_id = #{user_id}
     </update>
 
 </mapper>

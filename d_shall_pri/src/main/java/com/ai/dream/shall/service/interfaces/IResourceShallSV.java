@@ -13,7 +13,7 @@ public interface IResourceShallSV {
 
     Map<String,Object>  queryResUser(Map<String,Object> paraMap) throws Exception;
 
-    List<Map<String,Object>> queryAllResource() throws Exception;
+    List<Map<String,Object>> queryAllResource(Map<String,Object> paraMap) throws Exception;
 
     boolean  updateResource(Map<String,Object> paraMap) throws Exception;
 

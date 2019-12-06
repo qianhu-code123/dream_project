@@ -47,9 +47,14 @@ zuul:
       serviceId: collection-server
       stripPrefix: false
       sensitiveHeaders: "*"
-    sec-collect:
+    dream-sec:
       path: /user/**
       serviceId: sec-server
+      stripPrefix: false
+      sensitiveHeaders: "*"
+    dream-shall:
+      path: /shall/**
+      serviceId: shall-server
       stripPrefix: false
       sensitiveHeaders: "*"
   host:
