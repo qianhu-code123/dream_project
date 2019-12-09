@@ -109,6 +109,47 @@ public class parseQuery {
         return list;
     }
 
+    @Cacheable(cacheNames = "dealMobileCl",key = "#catalog + #type+ ''", unless = "#result == null")
+    public Map<String,Object> getMobileCl(String catalog, String type, int page, int limit) throws Exception{
+        Map<String,Object> finalMap = new HashMap<>();
+        String url = "http://www.dingdiann.com/"+catalog+"/";
+        Document doc ;
+        List<Map<String,Object>> list = new ArrayList<>();
+        try {
+            int k = page * limit;
+            int j = k - limit;
+            doc = Jsoup.connect(url).get();
+            Elements content = doc.getElementsByClass("box_con").select("div>dl").select("dd").select("a");
+            for(int t=0;t<12;t++){
+                content.remove(0);
+            }
+            Iterator it = content.iterator();
+            int i = 1;
+            while(it.hasNext()){
+                if(i<=k && i>j) {
+                    Map<String, Object> relMap = new HashMap<>();
+                    Element el = (Element) it.next();
+                    //将超链接去掉，属性值放到class中
+                    el.addClass(el.attr("href"));
+                    el.removeAttr("href");
+                    relMap.put("catlog",el.toString());
+                    list.add(relMap);
+                }else{
+                    it.next();
+                }
+                i++;
+            }
+            finalMap.put("list",list);
+            finalMap.put("count",Long.parseLong(content.size()+"") );
+        }catch (Exception e){
+            throw e;
+        }
+        return finalMap;
+    }
+
+
+
+
     @Cacheable(cacheNames = "getContent",key = "#path + ''", unless = "#result == null")
     public  List<String> getContent(String path) throws Exception{
         String prefix = "http://www.dingdiann.com";

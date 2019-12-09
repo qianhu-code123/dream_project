@@ -59,10 +59,22 @@ public class parseReaderController {
         String jsonStr = "";
         try {
             String catalog = request.getParameter("catalog");
+            String type = request.getParameter("type");
+            long size = 0;
+            int page = Integer.parseInt(request.getParameter("page"));
+            int limit = Integer.parseInt(request.getParameter("limit"));
             parseQuery pq = new parseQuery();
-            List<Map<String,Object>> list = pq.getCatalog(catalog);
+            List<Map<String,Object>> list = new ArrayList<>();
+            if("pc".equals(type)){
+                list = pq.getCatalog(catalog);
+                size = list.size();
+            }else if("mobile".equals(type)){
+                Map<String,Object> temMap = pq.getMobileCl(catalog,type,page,limit);
+                list = (List<Map<String, Object>>) temMap.get("list");
+                size = (long) temMap.get("count");
+            }
             response.setHeader("Access-Control-Allow-Origin","*");
-            jsonStr = JsonInit.rebakJson("0000","",list, list.size());
+            jsonStr = JsonInit.rebakJson("0000","",list, size);
         }catch (Exception e){
             log.error("失败原因: ",e);
             throw e;

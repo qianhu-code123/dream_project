@@ -25,9 +25,23 @@
         },
         {
           "title": "在线阅读",
-          "href": "page/setting.html",
+          "href": "",
           "icon": "fa fa-gears",
-          "target": "_self"
+          "target": "_self",
+          "child": [
+            {
+              "title": "PC端阅读",
+              "href": "page/setting.html",
+              "icon": "fa fa-gears",
+              "target": "_self"
+            },
+            {
+              "title": "手机端阅读",
+              "href": "page/settingmobile.html",
+              "icon": "fa fa-gears",
+              "target": "_self"
+            }
+          ]
         },
         {
           "title": "资源共享",

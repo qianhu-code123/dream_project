@@ -50,23 +50,32 @@
             url: url,
             cellMinWidth: 100,
             height: 'full-100',
-            where:{"token":token,"user_id":userId,"catalog":catalog,"type":"pc"},
+            where:{"token":token,"user_id":userId,"catalog":catalog,"type":"mobile"},
             cols: [[
-                {field: 'catlog1',  title: '',event: 'catevent1', style:'cursor: pointer;'},
-                {field: 'catlog2',  title: '',event: 'catevent2', style:'cursor: pointer;'},
-                {field: 'catlog3',  title: '',event: 'catevent3', style:'cursor: pointer;'},
-                {field: 'catlog4',  title: '',event: 'catevent4', style:'cursor: pointer;'},
-                {field: 'catlog5',  title: '',event: 'catevent5', style:'cursor: pointer;'},
-                {field: 'catlog6',  title: '',event: 'catevent6', style:'cursor: pointer;'},
+                {field: 'catlog',  title: '', style:'cursor: pointer;'}
             ]],
             id:"testReload",
-            limit:2000,
+            limits: [100],
+            limit:100,
             page: true
+        });
+
+        //监听单击事件
+        table.on('row(currentTableFilter)', function(obj){
+            var event = obj.data.catlog;
+            //servlet路径
+            localStorage.setItem("path",event.split("\"")[3]);
+            //content tiltle
+            localStorage.setItem("content",event.split("\"")[4].split("<")[0].replace(">",""));
+            var preUrl = window.location.href.split("?")[0].replace("read-catalog-mobile.html","read-content.html");
+            var param = "?"+window.location.href.split("?")[1];
+            var url = preUrl + param;
+            window.open(url,"_blank")
         });
 
     });
 
-    function eventTools(event) {
+    /*function eventTools(event) {
         //servlet路径
         localStorage.setItem("path",event.split("\"")[3]);
         //content tiltle
@@ -75,7 +84,7 @@
         var param = "?"+window.location.href.split("?")[1];
         var url = preUrl + param;
         window.open(url,"_blank")
-    }
+    }*/
 
 </script>
 
