@@ -125,6 +125,7 @@
                         },function () {
                             localStorage.setItem("user_id",res.data.user_id);
                             localStorage.setItem("token",res.data.token);
+                            localStorage.setItem("username",data.username);
                             var url = "http://localhost:1234/index.html?username="+res.data.username+"&token="+res.data.token+"&user_id="+res.data.user_id;
                             window.location = url;
                         })

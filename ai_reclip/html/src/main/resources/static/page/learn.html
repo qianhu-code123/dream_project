@@ -45,7 +45,8 @@
         </fieldset>
 
         <div class="layui-btn-group">
-            <button class="layui-btn data-add-btn" >添加</button>
+            <button class="layui-btn data-add-btn" >单个添加</button>
+            <button class="layui-btn" id="addmore"><i class="layui-icon">&#xe67c;</i>批量添加</button>
             <button class="layui-btn layui-btn-danger data-delete-btn">删除</button>
             <button class="layui-btn layui-btn-normal data-update-btn">修改</button>
         </div>
@@ -55,10 +56,12 @@
 <script src="../lib/jquery-3.4.1/jquery-3.4.1.min.js" charset="utf-8"></script>
 <script src="../lib/layui-v2.5.4/layui.js" charset="utf-8"></script>
 <script>
-    layui.use(['form', 'table'], function () {
+    layui.use(['form', 'table','upload'], function () {
         var $ = layui.jquery,
             form = layui.form,
-            table = layui.table;
+            table = layui.table,
+            upload = layui.upload
+        ;
         var token = localStorage.getItem("token");
         var userId = localStorage.getItem("user_id");
         table.render({
@@ -80,6 +83,22 @@
             page: true
         });
 
+        //执行实例
+        upload.render({
+            elem: '#addmore' //绑定元素
+            ,url: 'http://localhost:5000/shall/res/queryAllResource' //上传接口
+            ,done: function(res){
+                //上传完毕回调
+                console.log(res);
+            }
+            ,error: function(){
+                //请求异常回调
+                alert(111);
+            }
+            ,accept:'file'//允许的文件类型
+            ,exts: 'xls'//允许上传的文件后缀
+            ,auto: true//选择文件后是否自动上传
+        });
 
         //表格重载
         var $ = layui.$, active = {

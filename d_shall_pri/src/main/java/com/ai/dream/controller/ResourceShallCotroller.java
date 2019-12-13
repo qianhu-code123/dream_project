@@ -1,5 +1,6 @@
 package com.ai.dream.controller;
 
+import com.ai.dream.shall.entity.ResourceShall;
 import com.ai.dream.shall.service.interfaces.IResourceShallSV;
 import com.ai.dream.utils.EmptyUtil;
 import com.ai.dream.utils.JsonInit;
@@ -9,10 +10,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -63,6 +67,28 @@ public class ResourceShallCotroller {
         }
         return jsonStr;
     }
+
+    @RequestMapping("/shall/res/saveFromExcel")
+    public String saveMore(@RequestParam MultipartFile file, HttpServletRequest request, HttpServletResponse response) throws  Exception{
+         List<ResourceShall> listshall = new ArrayList<>();
+         Map<String,Object> relMap = new HashMap<>();
+        InputStream input = null;
+         String jsonStr = "";
+        try {
+
+
+
+
+
+
+        }catch (Exception e){
+
+        }
+        return null;
+    }
+
+
+
 
     /**
      * 查询所有资源[user][查询结果不含秘钥][用户展示]

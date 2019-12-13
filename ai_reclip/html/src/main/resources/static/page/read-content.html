@@ -70,7 +70,6 @@
                 $("#top").show();
                 var str = "";
                 var arry = res.data;
-                console.log(arry);
                 var title = arry[arry.length-1].replace("<h1>","").replace("</h1>","");
                 $("#title").text(title);
                 for(var i=1;i<arry.length-1;i++){
