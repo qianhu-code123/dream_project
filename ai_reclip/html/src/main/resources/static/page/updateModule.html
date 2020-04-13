@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>menu</title>
+    <link rel="stylesheet" href="../lib/layui-v2.5.4/css/layui.css" media="all">
+    <link rel="stylesheet" href="../css/public.css" media="all">
+</head>
+<body>
+<form class="layui-form" action="">
+    <div class="layui-form-item">
+        <label class="layui-form-label">资源名称</label>
+        <div class="layui-input-block">
+            <input type="text" name="resName" required  lay-verify="required" placeholder="请输入资源名称" autocomplete="off" class="layui-input" style="width: 300px">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">资源链接</label>
+        <div class="layui-input-block">
+            <input type="text" name="resUrl" required  lay-verify="required" placeholder="请输入url" autocomplete="off" class="layui-input" style="width: 300px">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">提取码</label>
+        <div class="layui-input-block">
+            <input type="text" name="resCheck" required  lay-verify="required" placeholder="请输入提取码" autocomplete="off" class="layui-input" style="width: 300px">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">创建日期</label>
+        <div class="layui-input-block">
+            <input type="text" name="createDate" required  lay-verify="required" placeholder="请输入创建日期:yyyy-mm-dd" autocomplete="off" class="layui-input" style="width: 300px">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">状态</label>
+        <div class="layui-input-block">
+            <input type="text" name="state" required  lay-verify="required" placeholder="请输入用户名" autocomplete="off" class="layui-input" style="width: 300px" value="U">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">等级</label>
+        <div class="layui-input-block">
+            <input type="text" name="level" required  lay-verify="required" placeholder="请输入权限:普通的有L,G,M，高级的有VL,VG,VM" autocomplete="off" class="layui-input" style="width: 300px">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+</form>
+<script src="../lib/jquery-3.4.1/jquery-3.4.1.min.js" charset="utf-8"></script>
+<script src="../lib/layui-v2.5.4/layui.js" charset="utf-8"></script>
+<script>
+
+    layui.use('form', function(){
+        var form = layui.form;
+
+        //监听提交
+        form.on('submit(formDemo)', function(data){
+
+            let token = localStorage.getItem("token");
+            let userId = localStorage.getItem("user_id");
+            let res_id = localStorage.getItem("res_id");
+            $.ajax({
+                url:"http://localhost:5000/shall/res/updateRes",
+                data: {"res_id":res_id,"state":data.field.state, "level":data.field.level, "res_name":data.field.resName,"res_url":data.field.resUrl, "res_check":data.field.resCheck,"create_date":data.field.createDate, "token":token, "user_id":userId},
+                type:"Post",
+                dataType:"json",
+                success:function(res){
+                    if(res.code == "-1"){
+                        layer.msg(res.msg,{
+                            icon: 2,
+                            time: 1000 //2秒关闭（如果不配置，默认是3秒）
+                        })
+                    }else{
+                        layer.msg("修改成功，正在跳转",{
+                            icon: 1,
+                            time: 1000 //2秒关闭（如果不配置，默认是3秒）
+                        },function () {
+                            window.parent.location.reload();//刷新父页面
+                            let index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                            parent.layer.close(index);
+                        })
+                    }
+                },
+                error:function(){
+                    layer.msg("修改失败，请重试")
+                }
+            });
+
+
+            return false;
+        });
+    });
+</script>
+
+
+</body>
+</html>

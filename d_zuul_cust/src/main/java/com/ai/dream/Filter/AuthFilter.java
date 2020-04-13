@@ -114,6 +114,8 @@ public class AuthFilter extends ZuulFilter {
             }
         } else {
             String redisToken = jedisCluster.get("TOKEN_"+userIdCookie);
+
+
             if (StringUtils.isEmpty(redisToken) || !redisToken.equals(token)) {
                 setUnauthorizedResponse(requestContext, INVALID_TOKEN);
             }

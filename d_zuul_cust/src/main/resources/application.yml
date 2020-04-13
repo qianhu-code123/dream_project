@@ -12,7 +12,8 @@ spring:
 
   redis:
     cluster:
-      nodes: 49.235.135.75:7001,49.235.135.75:7002,49.235.135.75:7003,49.235.135.75:7004,49.235.135.75:7005,49.235.135.75:7006
+      #nodes: 49.235.135.75:7001,49.235.135.75:7002,49.235.135.75:7003,49.235.135.75:7004,49.235.135.75:7005,49.235.135.75:7006
+      nodes: 10.9.236.55:7001,10.9.236.55:7002,10.9.236.55:7003,10.9.236.55:7004,10.9.236.55:7005,10.9.236.55:7006
     timeout: 2000
     database: 0
     jedis:
@@ -21,7 +22,6 @@ spring:
         max-wait: 10000
         max-idle: 5000
         min-idle: 0
-
 eureka:
   client:
     registerWithEureka: true # 服务注册开关
@@ -57,9 +57,19 @@ zuul:
       serviceId: shall-server
       stripPrefix: false
       sensitiveHeaders: "*"
+    dream-tool:
+      path: /tools/**
+      serviceId: tools-server
+      stripPrefix: false
+      sensitiveHeaders: "*"
+    dream-online:
+      path: /online/**
+      serviceId: online-server
+      stripPrefix: false
+      sensitiveHeaders: "*"
   host:
     connect-timeout-millis: 15000   #HTTP连接超时大于Hystrix的超时时间
     socket-timeout-millis: 60000    #socket超时
 ribbon:        #设置ribbon的超时时间小于zuul的超时时间,不然会报504的错误
-  ReadTimeout: 10000
-  ConnectTimeout: 10000
+  ReadTimeout: 50000
+  ConnectTimeout: 50000

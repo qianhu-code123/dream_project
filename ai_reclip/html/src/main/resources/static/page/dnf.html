@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>DNF皮肤下载</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../lib/layui-v2.5.4/css/layui.css" media="all">
+    <link rel="stylesheet" href="../css/public.css" media="all">
+    <style>
+        .layui-form-item .layui-input-company {width: auto;padding-right: 10px;line-height: 38px;}
+        .aubook {
+            height: 700px;
+        }
+        table a {
+            cursor:pointer;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+<div class="layuimini-container">
+    <div class="layuimini-main">
+        <fieldset class="layui-elem-field aubook">
+            <legend id="showtitle" hidden><span style="color: #1aa094">请双击选中列查看</span></legend>
+            <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
+            <div id="laypage"></div>
+        </fieldset>
+    </div>
+</div>
+<script src="../lib/jquery-3.4.1/jquery-3.4.1.min.js" charset="utf-8"></script>
+<script src="../lib/layui-v2.5.4/layui.js" charset="utf-8"></script>
+
+<script>
+    layui.use(['table','form'], function () {
+        var form = layui.form
+            , layer = layui.layer
+            , table = layui.table
+            , laypage = layui.laypage;
+        var token = localStorage.getItem("token");
+        var userId = localStorage.getItem("user_id");
+
+        //监听提交
+        form.on('submit(data-search-btn)', function (data) {
+            $("#showtitle").show();
+            table.render({
+                elem: '#currentTableId',
+                url: 'http://localhost:5000/read/parse/query',
+                where:{"keyword":data.field.keyword,"token":token,"user_id":userId},
+                //书籍类型 作品名称 最新章节 作者 点击 更新时间 状态
+                cols: [[
+                    {field: 'bookType', width: 100, title: '书籍类型'},
+                    {field: 'bookName', width: 250, title: '作品名称'},
+                    {field: 'newTitle', minWidth: 100, title: '最新章节'},
+                    {field: 'author', width: 150, title: '作者'},
+                    {field: 'clickTime', title: '点击', width: 100},
+                    {field: 'upDate', title: '更新时间', width: 170},
+                    {field: 'state', width: 80, title: '状态'}
+                ]],
+                id:"testReload",
+                page: true
+            });
+            //监听行双击事件
+            table.on('rowDouble(currentTableFilter)', function(obj){
+                var data = obj.data;
+                var bookname = data.bookName.split(">")[1].split("<")[0];
+                var catalog = data.bookName.split("/")[1];
+                localStorage.setItem("bookname",bookname);
+                localStorage.setItem("catalog",catalog);
+
+                var preUrl = parent.location.href.split("#")[0].split("?")[0].replace("index.html","page/read-catalog.html?");
+                var params = parent.location.href.split("#")[0].split("?")[1];
+                window.open(preUrl+params,"_blank");
+            });
+        });
+
+    });
+
+
+</script>
+</body>
+</html>

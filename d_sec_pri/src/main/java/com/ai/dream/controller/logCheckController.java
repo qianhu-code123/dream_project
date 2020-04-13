@@ -43,7 +43,7 @@ public class logCheckController {
             relMap.put("passwd",request.getParameter("passwd"));
             Map<String,Object> teMap = isv.queryByUsername(relMap);
             if(relMap.get("passwd").equals(teMap.get("passwd"))){
-                long user_id = (long) teMap.get("user_id");
+                long user_id = Long.parseLong(String.valueOf(teMap.get("user_id"))) ;
                 String token = KeyUtils.genUniqueKey();
                 String redis_key = "TOKEN_" + user_id;
                 // NX是不存在时才set， XX是存在时才set， EX是秒，PX是毫秒

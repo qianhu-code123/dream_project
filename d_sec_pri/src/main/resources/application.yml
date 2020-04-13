@@ -18,9 +18,10 @@ spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource            # 当前数据源操作类型
     driver-class-name: com.mysql.cj.jdbc.Driver             # mysql驱动包
-    url: jdbc:mysql://49.235.135.75:3306/workdream?serverTimezone=GMT%2B8  # 数据库名称
-    username: dreamer
-    password: 1hblsqT!
+    #url: jdbc:mysql://49.235.135.75:3306/workdream?serverTimezone=GMT%2B8  # 数据库名称
+    url: jdbc:mysql://10.9.236.55:3306/rebook?serverTimezone=GMT%2B8  # 数据库名称
+    username: book   #内网：book .公网 dreamer
+    password: Lahmy1c! #内网：Lahmy1c! .公网 1hblsqT!
     dbcp2:
       min-idle: 5                                # 数据库连接池的最小维持连接数
       initial-size: 5                            # 初始化连接数
@@ -28,7 +29,8 @@ spring:
       max-wait-millis: 150                       # 等待连接获取的最大超时时间
   redis:
     cluster:
-      nodes: 49.235.135.75:7001,49.235.135.75:7002,49.235.135.75:7003,49.235.135.75:7004,49.235.135.75:7005,49.235.135.75:7006
+      #nodes: 49.235.135.75:7001,49.235.135.75:7002,49.235.135.75:7003,49.235.135.75:7004,49.235.135.75:7005,49.235.135.75:7006
+     nodes: 10.9.236.55:7001,10.9.236.55:7002,10.9.236.55:7003,10.9.236.55:7004,10.9.236.55:7005,10.9.236.55:7006
     timeout: 2000
     database: 0
     jedis:
@@ -37,6 +39,7 @@ spring:
         max-wait: 10000
         max-idle: 5000
         min-idle: 0
+
 
 eureka:
   client:

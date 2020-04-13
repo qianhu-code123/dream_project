@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ai.dream.worknote.dao.WorknoteMapper">
+
+    <insert id="saveNote" parameterType="java.util.Map">
+        insert into worknote(note_title,note_date,work_content,state) values(#{note_title},#{note_date},#{work_content},#{state})
+    </insert>
+
+    <select id="initAllNote"  resultType="java.util.Map" parameterType="java.util.Map">
+        select * from worknote where state='U' and type = #{type}
+    </select>
+
+    <select id="queryByTitle" parameterType="java.util.Map" resultType="java.util.Map">
+        select * from worknote where state='U' and note_title like concat('%',#{note_title},'%')
+    </select>
+
+
+</mapper>

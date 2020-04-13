@@ -67,7 +67,7 @@
         table.render({
             elem: '#currentTableId',
             url: 'http://localhost:5000/shall/res/queryAllResource',
-            where:{"token":token,"user_id":userId},
+            where:{"token":token,"user_id":userId,"type":"L"},
             cols: [[
                 {type: "checkbox", width: 50, fixed: "left"},
                 {field: 'res_id', width: 200, title: 'ID', sort: true},
@@ -75,7 +75,7 @@
                 {field: 'res_url', minWidth: 150, title: '资源链接'},
                 {field: 'res_check', width: 100, title: '提取码',style:'cursor: pointer;'},
                 {field: 'expire_date', title: '有效日期', minWidth: 120},
-                {field: 'state', width: 80, title: '状态'}
+                {field: 'level', width: 140, title: '备注'}
             ]],
             limits: [10, 15, 20, 25, 50, 100],
             limit: 15,
@@ -85,18 +85,27 @@
 
         //执行实例
         upload.render({
-            elem: '#addmore' //绑定元素
-            ,url: 'http://localhost:5000/shall/res/queryAllResource' //上传接口
+            elem: '#addmore'
+            ,url: 'http://localhost:5000/shall/res/saveFromExcel?token='+localStorage.getItem("token")+"&user_id="+localStorage.getItem("user_id") //上传接口
             ,done: function(res){
                 //上传完毕回调
-                console.log(res);
+                if("-1" === res.code){
+                    layer.alert("添加失败，"+res.msg);
+                }else {
+                    layer.msg("添加成功",{
+                        icon: 1,
+                        time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                    });
+                    window.location.reload();
+                }
             }
             ,error: function(){
                 //请求异常回调
-                alert(111);
+                layer.alert("请求异常回调");
             }
+            ,acceptMime: '.xlsx,.xls'
+            ,type: 'file'
             ,accept:'file'//允许的文件类型
-            ,exts: 'xls'//允许上传的文件后缀
             ,auto: true//选择文件后是否自动上传
         });
 
@@ -127,18 +136,18 @@
                 area: ['700px', '450px'],
                 fixed: false, //不固定
                 maxmin: true,
-                content: 'temp-form.html'
+                content: 'addModule.html'
             })
         });
 
         // 删除操作
         $(".data-delete-btn").on("click", function () {
-            var checkStatus = table.checkStatus('testReload');
-            var data = checkStatus.data; //获取选中行的数据
-            var token = localStorage.getItem("token");
-            var userId = localStorage.getItem("user_id");
+            let checkStatus = table.checkStatus('testReload');
+            let data = checkStatus.data; //获取选中行的数据
+            let token = localStorage.getItem("token");
+            let userId = localStorage.getItem("user_id");
             $.ajax({
-                url:"http://localhost:5000/user/delUser",
+                url:"http://localhost:5000/shall/res/delByResId",
                 data: {"data":JSON.stringify(data), "token":token, "user_id":userId},
                 type:"Post",
                 dataType:"json",
@@ -166,13 +175,13 @@
         $(".data-update-btn").on("click", function () {
             var checkStatus = table.checkStatus('testReload');
             var data = checkStatus.data; //获取选中行的数据
-            localStorage.setItem("userItemId",data[0].user_id)
+            localStorage.setItem("res_id",data[0].res_id)
             layer.open({
                 type: 2,
                 area: ['700px', '450px'],
                 fixed: false, //不固定
                 maxmin: true,
-                content: 'temp-update.html'
+                content: 'updateModule.html'
             })
         });
 
@@ -201,8 +210,8 @@
      */
     function getTicket(obj) {
         layer = layui.layer;
-        var token = localStorage.getItem("token");
-        var userId = localStorage.getItem("user_id");
+        let token = localStorage.getItem("token");
+        let userId = localStorage.getItem("user_id");
         $.ajax({
             url:"http://localhost:5000/shall/res/queryResource",
             data: {"res_id":obj, "token":token, "user_id":userId},
@@ -212,12 +221,12 @@
                 if(res.code === "0000"){
                     layer.open({
                         title: '查询成功'
-                        ,content: '提取码：'+res.data.res_check+ "<br/>还剩余"+"<span style='color:red'>"+res.data.times+"</span>"+"查看机会!"
+                        ,content: '提取码：'+res.data.res_check+ "<br/>普通资源查看次数还剩"+"<span style='color:red'>"+res.data.shall_times+"</span>"+"次!"+"<br/>精品资源查看次数还剩"+"<span style='color:red'>"+res.data.vip_times+"</span>"+"次!"
                     });
-                }else if(res.code==="1000"){
+                }else if(res.code==="-1"){
                     layer.open({
                         title: '查询失败',
-                        content: '所剩次数不足一次，请联系管理员!'
+                        content: res.msg
                     })
                 } else{
                     layer.msg("查询失败,请重试")

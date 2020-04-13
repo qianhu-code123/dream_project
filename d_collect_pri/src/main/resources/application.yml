@@ -12,9 +12,10 @@ spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource            # 当前数据源操作类型
     driver-class-name: com.mysql.cj.jdbc.Driver             # mysql驱动包
-    url: jdbc:mysql://49.235.135.75:3306/workdream?serverTimezone=GMT%2B8  # 数据库名称
-    username: dreamer
-    password: 1hblsqT!
+   #url: jdbc:mysql://49.235.135.75:3306/workdream?serverTimezone=GMT%2B8  # 数据库名称
+    url: jdbc:mysql://10.9.236.55:3306/rebook?serverTimezone=GMT%2B8  # 数据库名称
+    username: book   #内网：book .公网 dreamer
+    password: Lahmy1c! #内网：Lahmy1c! .公网 1hblsqT!
     dbcp2:
       min-idle: 5                                # 数据库连接池的最小维持连接数
       initial-size: 5                            # 初始化连接数

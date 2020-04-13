@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>用户列表</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="Access-Control-Allow-Origin" content="*">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="icon" href="images/favicon.ico">
+    <link rel="stylesheet" href="../lib/layui-v2.5.4/css/layui.css" media="all">
+    <link rel="stylesheet" href="../css/layuimini.css" media="all">
+    <link rel="stylesheet" href="../lib/font-awesome-4.7.0/css/font-awesome.min.css" media="all">
+</head>
+<body>
+<div class="layuimini-container">
+    <div class="layuimini-main">
+        <fieldset class="layui-elem-field layuimini-search">
+            <legend>技术总结</legend>
+            <div style="margin: 10px 10px 10px 10px">
+                <form class="layui-form layui-form-pane" action="">
+                    <div class="layui-form-item">
+                        <blockquote class="layui-elem-quote" style="font-family: '楷体', '微软雅黑'">这里是平时工作中用到的技术和新学的东西，欢迎继续添加!!!</blockquote>
+                        <div class="layui-inline">
+                            <button type="button" class="layui-btn" id="noteAdd">
+                                <i class="layui-icon">&#xe608;</i> 添加笔记
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </fieldset>
+
+        <div class="layui-collapse">
+            <div class="layui-colla-item">
+                <h2 class="layui-colla-title">[笔记]最新redis cluster集群</h2>
+                <div class="layui-colla-content" >
+                    <ul class="layui-timeline">
+                        <li class="layui-timeline-item">
+                            <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+                            <div class="layui-timeline-content layui-text">
+                                <h3 class="layui-timeline-title">8月18日</h3>
+                                <p>
+                                    1.下载最新ruby redis<br/>2.进入解压后的包,src目录下 使用命令make<br/>3.搭建集群(cluster)<br/>				a.先创建一个cluster目录 (/home/qianhu/cluster)<br/>				b.创建6个集群(3个master 3个slave),这里是7000 ..7005(都是目录)<br/>				c.将redis-3.x中redis.conf拷贝到每个集群里面<br/>				d.分别在每个集群里面的redis.conf中配置<br/>					以第一个cluster实例为例<br/>					port 7000  ---集群的端口号 (本机回环是:127.0.0.1:7000)<br/>					cluster-enable yes   ---yes  //开启集群  把注释#去掉<br/>					cluster-config-file nodes-6379.conf   //集群的配置  配置文件首次启动自动生成<br/>					cluster-node-timeout 15000   //节点连接超时设置<br/>					[appendonly yes] //aof日志开启  有需要就开启，它会每次写操作都记录一条日志　<br/>				e.配置完成之后,在执行命令:/home/qianhu/redis-3.x/src/redis-server /home/qianhu/cluster/7000/redis.conf		<br/>4.这个时候gem install redis 会报 --zlib错误<br/>这个时候下载 yum install zlib   yum install openssl<br/>在ruby的ext/zlib/目录下<br/>ruby extconfig.rb<br/>修改Makefile文件把${top_scipte} 全改成../..<br/>make && make install<br/><br/>在ruby ext/openssl目录下<br/>ruby extconfig.rb<br/>修改Makefile文件把${top_scipte} 全改成../..<br/>make && make install<br/>最后在gem install redis<br/><br/><br/>检查本机与虚拟机是否可以互相ping通，如本机IP：192.168.22.111  虚拟机IP：192.168.44.129 (设置虚拟机静态IP已设置)<br/>本机 win+R 输入cmd 进入dos 输入 ping 192.168.44.129 ，查看数据输送情况<br/>虚拟机： ping 192.168.22.111 查看数据输送情况<br/>查看6379（或者自定义redis端口）时候打开<br/>firewall-cmd --query-port=6379/tcp 如果返回no则端口没有开启<br/>firewall-cmd --add-port=6379/tcp  （加 --permanent 永久有效），返回success说明<br/>【sudo firewall-cmd --permanent --add-port=7000/tcp --开放端口】开启成功<br/>第2步无误之后，检查虚拟机防火墙设置<br/>关闭防火墙两种方式<br/>iptables 形式防火墙关闭<br/>service iptables stop<br/>chkconfig iptables off 永久关闭<br/>firewalld 形式防火墙关闭<br/>systemctl stop firewalld && systemctl disable firewalld <br/>chkconfig firewalld off 永久关闭<br/>检查防火墙状态(是否dead状态)<br/>systemctl status iptables<br/>systemctl status firewalld<br/><br/>针对redis 5.0以上需要使用./redis-cli.sh<br/>./redis-cli  --cluster create  192.168.72.130:7000  192.168.72.130:7001  192.168.72.130:7002 --cluster-replicas 0<br/>Example:<br/>redis-cli --cluster create 127.0.0.1:6379 127.0.0.1:6380 127.0.0.1:6381 127.0.0.1:6382 127.0.0.1:6383 127.0.0.1:6384 --cluster-replicas 1<br/><br/><br/> ./redis-cli --cluster create 49.235.135.75:7001 49.235.135.75:7002 49.235.135.75:7003 49.235.135.75:7004 49.235.135.75:7005 49.235.135.75:7006 --cluster-replicas 1<br/><br/>0  表示没有从节点 	------至少3个<br/>1  每个主节点有一个从节点 	-----至少6个
+                                </p>
+                            </div>
+                        </li>
+                        <li class="layui-timeline-item">
+                            <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+                            <div class="layui-timeline-content layui-text">
+                                <h3 class="layui-timeline-title">8月16日</h3>
+                                <p>杜甫的思想核心是儒家的仁政思想，他有“<em>致君尧舜上，再使风俗淳</em>”的宏伟抱负。个人最爱的名篇有：</p>
+                                <ul>
+                                    <li>《登高》</li>
+                                    <li>《茅屋为秋风所破歌》</li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="layui-timeline-item">
+                            <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+                            <div class="layui-timeline-content layui-text">
+                                <h3 class="layui-timeline-title">8月15日</h3>
+                                <p>
+                                    中国人民抗日战争胜利72周年
+                                    <br>常常在想，尽管对这个国家有这样那样的抱怨，但我们的确生在了最好的时代
+                                    <br>铭记、感恩
+                                    <br>所有为中华民族浴血奋战的英雄将士
+                                    <br>永垂不朽
+                                </p>
+                            </div>
+                        </li>
+                        <li class="layui-timeline-item">
+                            <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+                            <div class="layui-timeline-content layui-text">
+                                <div class="layui-timeline-title">过去</div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="layui-colla-item">
+                <h2 class="layui-colla-title">[笔记]zookeeper技术总结</h2>
+                <div class="layui-colla-content ">内容区域</div>
+            </div>
+            <div class="layui-colla-item">
+                <h2 class="layui-colla-title">[笔记]docker技术总结</h2>
+                <div class="layui-colla-content">内容区域</div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../lib/jquery-3.4.1/jquery-3.4.1.min.js" charset="utf-8"></script>
+<script src="../lib/layui-v2.5.4/layui.js" charset="utf-8"></script>
+
+<script>
+    //注意：折叠面板 依赖 element 模块，否则无法进行功能性操作
+    layui.use(['element','layer'], function(){
+        var element = layui.element;
+
+        $("#noteAdd").click(function () {
+            layer.open()
+        })
+
+
+
+
+
+    });
+
+
+
+</script>
+<script>
+
+</script>
+
+</body>
+</html>

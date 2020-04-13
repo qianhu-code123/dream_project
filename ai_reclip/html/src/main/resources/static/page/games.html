@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>学习资源</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="Access-Control-Allow-Origin" content="*">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="icon" href="images/favicon.ico">
+    <link rel="stylesheet" href="../lib/layui-v2.5.4/css/layui.css" media="all">
+    <link rel="stylesheet" href="../css/layuimini.css" media="all">
+    <link rel="stylesheet" href="../lib/font-awesome-4.7.0/css/font-awesome.min.css" media="all">
+</head>
+<body>
+<div class="layuimini-container">
+    <div class="layuimini-main">
+
+        <fieldset class="layui-elem-field layuimini-search">
+            <legend>搜索信息</legend>
+            <div style="margin: 10px 10px 10px 10px">
+                <form class="layui-form layui-form-pane" action="">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">资源编号</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="res_id" id="res_id" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">资源名称</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="res_name" id="res_name" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <a class="layui-btn" lay-submit="" lay-filter="data-search-btn" data-type="reload">搜索</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </fieldset>
+
+        <div class="layui-btn-group">
+            <button class="layui-btn data-add-btn" >单个添加</button>
+            <button class="layui-btn" id="addmore"><i class="layui-icon">&#xe67c;</i>批量添加</button>
+            <button class="layui-btn layui-btn-danger data-delete-btn">删除</button>
+            <button class="layui-btn layui-btn-normal data-update-btn">修改</button>
+        </div>
+        <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
+    </div>
+</div>
+<script src="../lib/jquery-3.4.1/jquery-3.4.1.min.js" charset="utf-8"></script>
+<script src="../lib/layui-v2.5.4/layui.js" charset="utf-8"></script>
+<script>
+    layui.use(['form', 'table','upload'], function () {
+        var $ = layui.jquery,
+            form = layui.form,
+            table = layui.table,
+            upload = layui.upload
+        ;
+        var token = localStorage.getItem("token");
+        var userId = localStorage.getItem("user_id");
+        table.render({
+            elem: '#currentTableId',
+            url: 'http://localhost:5000/shall/res/queryAllResource',
+            where:{"token":token,"user_id":userId,"type":"G"},
+            cols: [[
+                {type: "checkbox", width: 50, fixed: "left"},
+                {field: 'res_id', width: 200, title: 'ID', sort: true},
+                {field: 'res_name', minWidth: 150, title: '资源名称'},
+                {field: 'res_url', minWidth: 150, title: '资源链接'},
+                {field: 'res_check', width: 100, title: '提取码',style:'cursor: pointer;'},
+                {field: 'expire_date', title: '有效日期', minWidth: 120},
+                {field: 'level', width: 140, title: '备注'}
+            ]],
+            limits: [10, 15, 20, 25, 50, 100],
+            limit: 15,
+            id:"testReload",
+            page: true
+        });
+
+        //执行实例
+        upload.render({
+            elem: '#addmore'
+            ,url: 'http://localhost:5000/shall/res/saveFromExcel?token='+localStorage.getItem("token")+"&user_id="+localStorage.getItem("user_id") //上传接口
+            ,done: function(res){
+                //上传完毕回调
+                console.log(res);
+            }
+            ,error: function(){
+                //请求异常回调
+                alert(111);
+            }
+            ,acceptMime: '.xlsx,.xls'
+            ,type: 'file'
+            ,accept:'file'//允许的文件类型
+            ,auto: true//选择文件后是否自动上传
+        });
+
+        //表格重载
+        var $ = layui.$, active = {
+            reload: function(){
+                var res_id = $('#res_id');
+                var res_name = $("#res_name");
+                table.reload('testReload', {
+                    where: {
+                        res_id: res_id.val(),
+                        res_name: res_name.val()
+                    }
+                });
+            }
+        };
+
+        //搜索
+        $('.layui-inline .layui-btn').on('click', function(){
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+
+        // 添加操作
+        $(".data-add-btn").on("click", function () {
+            layer.open({
+                type: 2,
+                area: ['700px', '450px'],
+                fixed: false, //不固定
+                maxmin: true,
+                content: 'temp-form.html'
+            })
+        });
+
+        // 删除操作
+        $(".data-delete-btn").on("click", function () {
+            var checkStatus = table.checkStatus('testReload');
+            var data = checkStatus.data; //获取选中行的数据
+            var token = localStorage.getItem("token");
+            var userId = localStorage.getItem("user_id");
+            $.ajax({
+                url:"http://localhost:5000/user/delUser",
+                data: {"data":JSON.stringify(data), "token":token, "user_id":userId},
+                type:"Post",
+                dataType:"json",
+                success:function(res){
+                    if(res.code == "-1"){
+                        layer.msg("删除失败，请重试",{
+                            icon: 2,
+                            time: 1000 //2秒关闭（如果不配置，默认是3秒）
+                        })
+                    }
+                    layer.msg("删除成功",{
+                        icon: 1,
+                        time: 500 //2秒关闭（如果不配置，默认是3秒）
+                    },function () {
+                        window.location.reload();//刷新父页面
+                    })
+                },
+                error:function(){
+                    layer.msg("删除失败，请重试")
+                }
+            });
+        });
+
+        //修改组件
+        $(".data-update-btn").on("click", function () {
+            var checkStatus = table.checkStatus('testReload');
+            var data = checkStatus.data; //获取选中行的数据
+            localStorage.setItem("userItemId",data[0].user_id)
+            layer.open({
+                type: 2,
+                area: ['700px', '450px'],
+                fixed: false, //不固定
+                maxmin: true,
+                content: 'temp-update.html'
+            })
+        });
+
+
+        //监听表格复选框选择
+        table.on('checkbox(currentTableFilter)', function (obj) {
+            console.log(obj)
+        });
+
+        table.on('tool(currentTableFilter)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'edit') {
+                layer.alert('编辑行：<br>' + JSON.stringify(data))
+            } else if (obj.event === 'delete') {
+                layer.confirm('真的删除行么', function (index) {
+                    obj.del();
+                    layer.close(index);
+                });
+            }
+        });
+    });
+
+    /**
+     * 查询提取码
+     * @param obj
+     */
+    function getTicket(obj) {
+        layer = layui.layer;
+        var token = localStorage.getItem("token");
+        var userId = localStorage.getItem("user_id");
+        $.ajax({
+            url:"http://localhost:5000/shall/res/queryResource",
+            data: {"res_id":obj, "token":token, "user_id":userId},
+            type:"Post",
+            dataType:"json",
+            success:function(res){
+                if(res.code === "0000"){
+                    layer.open({
+                        title: '查询成功'
+                        ,content: '提取码：'+res.data.res_check+ "<br/>普通资源查看次数还剩"+"<span style='color:red'>"+res.data.shall_times+"</span>"+"次!"+"<br/>精品资源查看次数还剩"+"<span style='color:red'>"+res.data.vip_times+"</span>"+"次!"
+                    });
+                }else if(res.code==="-1"){
+                    layer.open({
+                        title: '查询失败',
+                        content: res.msg
+                    })
+                } else{
+                    layer.msg("查询失败,请重试")
+                }
+            },
+            error:function(){
+                layer.msg("查询失败,请重试")
+            }
+        });
+    }
+
+</script>
+<script>
+
+</script>
+
+</body>
+</html>

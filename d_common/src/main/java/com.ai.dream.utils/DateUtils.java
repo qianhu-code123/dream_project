@@ -3,9 +3,12 @@ package com.ai.dream.utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.sql.Array;
 import java.sql.Timestamp;
+import java.text.ParseException;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -756,11 +759,36 @@ public class DateUtils {
     }
 
 
+    /**
+     * 把excel时间转成正常时间
+     * @param dateStr 用于转换字符串
+     * @return
+     */
+    public static String getExcelDate(String dateStr) throws ParseException {
+
+        String[] str = {"一月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月"};
+        String[] numstr = {"01","02","03","04","05","06","07","08","09","10","11","12"};
+        for(int i=2;i<str.length;i++){
+            if(dateStr.contains(str[i])){
+                String temstr = dateStr.replace(str[i],numstr[i]);
+                return temstr.split("-")[2]+"-"+temstr.split("-")[1]+"-"+temstr.split("-")[0];
+
+            }
+        }
+        for(int i=0;i<2;i++){
+            if(dateStr.contains(str[i])){
+                String temstr = dateStr.replace(str[i],numstr[i]);
+                return temstr.split("-")[2]+"-"+temstr.split("-")[1]+"-"+temstr.split("-")[0];
+            }
+        }
+
+        return null;
+    }
 
 
-
-
-
+    public static void main(String[] args) throws Exception{
+        System.out.println(getExcelDate("11-十二月-2019"));
+    }
 
 
 }
