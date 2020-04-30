@@ -7,6 +7,18 @@ spring:
   resources:
     static-locations: classpath:/static/
 
+  redis:
+    cluster:
+      #nodes: 49.235.135.75:7001,49.235.135.75:7002,49.235.135.75:7003,49.235.135.75:7004,49.235.135.75:7005,49.235.135.75:7006
+      nodes: 10.9.236.55:7001,10.9.236.55:7002,10.9.236.55:7003,10.9.236.55:7004,10.9.236.55:7005,10.9.236.55:7006
+    timeout: 2000
+    database: 0
+    jedis:
+      pool:
+        max-active: 5000
+        max-wait: 10000
+        max-idle: 5000
+        min-idle: 0
 eureka:
   client:
     registerWithEureka: true # 服务注册开关

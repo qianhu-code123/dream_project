@@ -13,4 +13,12 @@ public class KeyUtils {
         String key = System.currentTimeMillis() + String.valueOf(number);
         return MD5Utils.getMd5(key);
     }
+
+
+    public static void main(String[] args) {
+        Random random = new Random();
+        int number = random.nextInt(900000) + 100000;
+        String key = System.currentTimeMillis() + String.valueOf(number);
+        System.out.println(key.substring(8,16));
+    }
 }

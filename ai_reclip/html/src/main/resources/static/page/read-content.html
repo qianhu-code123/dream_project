@@ -59,8 +59,9 @@
     function init(path){
         var token = localStorage.getItem("token");
         var userId = localStorage.getItem("user_id");
+        var bookname = localStorage.getItem("bookname");
         //var title = localStorage.getItem("content");
-        var url = "http://localhost:5000/read"+path+"?"+"token="+token+"&user_id="+userId+"&path="+path;
+        var url = "http://localhost:5000/read"+path+"?"+"token="+token+"&user_id="+userId+"&path="+path+"&bookname="+bookname;
         $.ajax({
             url:url,
             type:"Post",

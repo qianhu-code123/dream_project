@@ -24,6 +24,18 @@
           "target": "_self"
         },
         {
+          "title": "DNF皮肤下载",
+          "href": "page/dnf.html",
+          "icon": "fa fa-download",
+          "target": "_self"
+        },
+        {
+          "title": "在线观影",
+          "href": "page/freeMv.html",
+          "icon": "fa fa-coffee",
+          "target": "_self"
+        },
+        {
           "title": "在线阅读",
           "href": "",
           "icon": "fa fa-gears",
@@ -103,24 +115,25 @@
           "child": [
             {
               "title": "技术篇",
-              "href": "page/today.html",
+              "href": "page/skillPage.html",
               "icon": "fa fa-send",
               "target": "_self"
             },
             {
               "title": "经验篇",
-              "href": "page/today.html",
+              "href": "page/expPage.html",
               "icon": "fa fa-send",
               "target": "_self"
             },
             {
               "title": "人事篇",
-              "href": "page/today.html",
+              "href": "page/hrPage.html",
               "icon": "fa fa-send",
               "target": "_self"
             }
           ]
         },
+
         {
           "title": "穷游日记",
           "href": "page/travelLog.html",

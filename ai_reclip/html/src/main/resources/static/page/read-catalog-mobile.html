@@ -38,7 +38,6 @@
         var $ = layui.jquery,
             table = layui.table;
         //获取当前url
-        console.log(window.location.href);
         var token = localStorage.getItem("token");
         var userId = localStorage.getItem("user_id");
         var bookname = localStorage.getItem("bookname");
@@ -59,34 +58,18 @@
             limit:100,
             page: true
         });
-
         //监听单击事件
         table.on('row(currentTableFilter)', function(obj){
             var event = obj.data.catlog;
             //servlet路径
             localStorage.setItem("path",event.split("\"")[3]);
-            //content tiltle
             localStorage.setItem("content",event.split("\"")[4].split("<")[0].replace(">",""));
             var preUrl = window.location.href.split("?")[0].replace("read-catalog-mobile.html","read-content.html");
             var param = "?"+window.location.href.split("?")[1];
             var url = preUrl + param;
             window.open(url,"_blank")
         });
-
     });
-
-    /*function eventTools(event) {
-        //servlet路径
-        localStorage.setItem("path",event.split("\"")[3]);
-        //content tiltle
-        localStorage.setItem("content",event.split("\"")[4].split("<")[0].replace(">",""));
-        var preUrl = window.location.href.split("?")[0].replace("read-catalog.html","read-content.html");
-        var param = "?"+window.location.href.split("?")[1];
-        var url = preUrl + param;
-        window.open(url,"_blank")
-    }*/
-
 </script>
-
 </body>
 </html>

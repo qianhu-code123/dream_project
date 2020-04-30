@@ -18,6 +18,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import redis.clients.jedis.JedisCluster;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -32,6 +33,9 @@ import java.util.Map;
 public class parseReaderController {
 
     Logger log = LoggerFactory.getLogger(parseReaderController.class);
+
+    @Autowired
+    private JedisCluster jedisCluster;
 
     @RequestMapping("/read/parse/query")
     public String  parseRead(HttpServletRequest request, HttpServletResponse response) throws Exception{
@@ -86,8 +90,11 @@ public class parseReaderController {
     public String parseBook(HttpServletRequest request,HttpServletResponse response) throws Exception{
         Map<String,Object> relMap = new HashMap<>();
         String dir = request.getParameter("path");
+        String userId = request.getParameter("user_id");
+        String bookname = request.getParameter("bookname");
         String jsonStr = "";
         try {
+            jedisCluster.set(userId,dir+"|"+bookname);
             parseQuery pq = new parseQuery();
             List<String> list = pq.getContent(dir);
             response.setHeader("Access-Control-Allow-Origin","*");
@@ -100,7 +107,28 @@ public class parseReaderController {
     }
 
 
-
+    @RequestMapping("/read/backNews")
+    public String backNews(HttpServletRequest request,HttpServletResponse response) throws Exception{
+        Map<String,Object> map = new HashMap<>();
+        String userId = request.getParameter("user_id");
+        String jsonStr = "";
+        try {
+            String path = jedisCluster.get(userId);
+            if(null == path || ""==path){
+                response.setHeader("Access-Control-Allow-Origin","*");
+                jsonStr = JsonInit.rebakJson("-1","",null, 1);
+                return jsonStr;
+            }else {
+                response.setHeader("Access-Control-Allow-Origin","*");
+                map.put("path",path.split("|")[0]);
+                map.put("bookname",path.split("|")[1]);
+            }
+        }catch (Exception e){
+            log.error("失败原因: ",e);
+            throw e;
+        }
+        return jsonStr;
+    }
 
 
 

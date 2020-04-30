@@ -27,20 +27,20 @@
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="api" options="-parameters" />
-      <module name="d_collect_pri" options="-parameters" />
+      <module name="d_collect_pri" options="-parameters -verbose -bootclasspath &quot;E:\soft\idea.2019.3.1\IntelliJ IDEA 2019.3.1\jbr/lib/rt.jar;E:\soft\idea.2019.3.1\IntelliJ IDEA 2019.3.1\jbr/lib/jce.jar;&quot;" />
       <module name="d_common" options="-parameters" />
-      <module name="d_online_pri" options="-parameters" />
-      <module name="d_read_pri" options="-parameters" />
-      <module name="d_register" options="-parameters" />
-      <module name="d_register_bak" options="-parameters" />
-      <module name="d_sec_pri" options="-parameters" />
-      <module name="d_shall_pri" options="-parameters" />
-      <module name="d_tools" options="-parameters" />
-      <module name="d_travel_pri" options="-parameters" />
-      <module name="d_twitur_pri" options="-parameters" />
-      <module name="d_zuul_cust" options="-parameters" />
+      <module name="d_online_pri" options="-parameters -verbose -bootclasspath D:/o2o/jdk1.8.0_31/jre/lib/rt.jar;D:/o2o/jdk1.8.0_31/jre/lib/jce.jar;" />
+      <module name="d_read_pri" options="-parameters -verbose -bootclasspath D:/o2o/jdk1.8.0_31/jre/lib/rt.jar;D:/o2o/jdk1.8.0_31/jre/lib/jce.jar;" />
+      <module name="d_register" options="-parameters -verbose -bootclasspath &quot;E:\soft\idea.2019.3.1\IntelliJ IDEA 2019.3.1\jbr/lib/rt.jar;E:\soft\idea.2019.3.1\IntelliJ IDEA 2019.3.1\jbr/lib/jce.jar;&quot;" />
+      <module name="d_register_bak" options="-parameters -verbose -bootclasspath &quot;E:\soft\idea.2019.3.1\IntelliJ IDEA 2019.3.1\jbr/lib/rt.jar;E:\soft\idea.2019.3.1\IntelliJ IDEA 2019.3.1\jbr/lib/jce.jar;&quot;" />
+      <module name="d_sec_pri" options="-parameters -verbose -bootclasspath &quot;E:\soft\idea.2019.3.1\IntelliJ IDEA 2019.3.1\jbr/lib/rt.jar;E:\soft\idea.2019.3.1\IntelliJ IDEA 2019.3.1\jbr/lib/jce.jar;&quot;" />
+      <module name="d_shall_pri" options="-parameters -verbose -bootclasspath &quot;E:\soft\idea.2019.3.1\IntelliJ IDEA 2019.3.1\jbr/lib/rt.jar;E:\soft\idea.2019.3.1\IntelliJ IDEA 2019.3.1\jbr/lib/jce.jar;&quot;" />
+      <module name="d_tools" options="-parameters -verbose -bootclasspath D:/o2o/jdk1.8.0_31/jre/lib/rt.jar;D:/o2o/jdk1.8.0_31/jre/lib/jce.jar;" />
+      <module name="d_travel_pri" options="-parameters -verbose -bootclasspath &quot;E:\soft\idea.2019.3.1\IntelliJ IDEA 2019.3.1\jbr/lib/rt.jar;E:\soft\idea.2019.3.1\IntelliJ IDEA 2019.3.1\jbr/lib/jce.jar;&quot;" />
+      <module name="d_twitur_pri" options="-parameters -verbose -bootclasspath &quot;E:\soft\idea.2019.3.1\IntelliJ IDEA 2019.3.1\jbr/lib/rt.jar;E:\soft\idea.2019.3.1\IntelliJ IDEA 2019.3.1\jbr/lib/jce.jar;&quot;" />
+      <module name="d_zuul_cust" options="-parameters -verbose -bootclasspath &quot;E:\soft\idea.2019.3.1\IntelliJ IDEA 2019.3.1\jbr/lib/rt.jar;E:\soft\idea.2019.3.1\IntelliJ IDEA 2019.3.1\jbr/lib/jce.jar;&quot;" />
       <module name="html" options="-parameters" />
-      <module name="worknote_pri" options="-parameters" />
+      <module name="worknote_pri" options="-parameters -verbose -bootclasspath D:/o2o/jdk1.8.0_31/jre/lib/rt.jar;D:/o2o/jdk1.8.0_31/jre/lib/jce.jar;" />
     </option>
   </component>
 </project>

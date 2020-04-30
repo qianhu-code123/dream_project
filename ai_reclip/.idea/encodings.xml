@@ -3,19 +3,34 @@
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/html" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/html/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/../d_collect_pri" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/../d_collect_pri/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/../d_common" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/../d_common/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/../d_online_pri" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/../d_online_pri/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/../d_read_pri" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/../d_read_pri/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/../d_register" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/../d_register/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/../d_register_bak" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/../d_register_bak/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/../d_sec_pri" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/../d_sec_pri/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/../d_shall_pri" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/../d_shall_pri/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/../d_tools" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/../d_tools/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/../d_travel_pri" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/../d_travel_pri/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/../d_twitur_pri" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/../d_twitur_pri/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/../d_zuul_cust" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/../d_zuul_cust/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/../dapi" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/../dapi/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/../worknote_pri" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/../worknote_pri/src/main/java" charset="UTF-8" />
   </component>
 </project>
