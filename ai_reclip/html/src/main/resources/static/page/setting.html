@@ -43,6 +43,7 @@
 
         <fieldset class="layui-elem-field aubook">
             <legend id="showtitle" hidden><span style="color: #1aa094">请双击选中列查看</span></legend>
+            <input type="button" class="layui-btn layui-btn-radius layui-btn-primary layui-btn-fluid" onclick="backNews()" value="点击阅读上次最新浏览记录">
             <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
             <div id="laypage"></div>
         </fieldset>
@@ -98,7 +99,37 @@
 
     });
 
+    function backNews() {
+        var token = localStorage.getItem("token");
+        var userId = localStorage.getItem("user_id");
+        $.ajax({
+            url:"http://localhost:5000/read/backNews",
+            data: {"token":token,"user_id":userId},
+            type:"Post",
+            dataType:"json",
+            success:function(res){
+                if(res.code !== '0000'){
+                    layer.msg("用户没有浏览记录",{
+                        icon: 2,
+                        time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                    })
+                }else {
+                    var catalog = res.data;
+                    localStorage.setItem("path",catalog);
+                    var preUrl = window.location.href.split("?")[0].replace("setting.html","read-content.html");
+                    var param = "?username="+localStorage.getItem("username")+"&token="+localStorage.getItem("token")+"&user_id="+localStorage.getItem("user_id");
+                    var url = preUrl + param;
 
+                    window.open(url,"_blank")
+                }
+            },
+            error:function(){
+                layer.msg("删除失败，请重试")
+            }
+        });
+
+
+    }
 </script>
 </body>
 </html>
